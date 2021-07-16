@@ -2,10 +2,13 @@
 // https://aboutreact.com/example-of-pre-populated-sqlite-database-in-react-native
 
 import React, {useEffect} from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
+import {View, Text, SafeAreaView, Button} from 'react-native';
 import Mybutton from './components/Mybutton';
 import Mytext from './components/Mytext';
 import {openDatabase} from 'react-native-sqlite-storage';
+
+//import PushNotification from 'react-native-push-notification';
+import PushNotification, {Importance} from 'react-native-push-notification';
 
 // Connction to access the pre-populated user_db.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
@@ -31,6 +34,42 @@ const HomeScreen = ({navigation}) => {
     });
   }, []);
 
+
+  const time = () =>{
+    let time = new Date();
+    let hours = time.getHours();
+    let minutes = time.getMinutes();
+    return (hours + ":" +minutes);
+  };
+  const messageString = () =>{
+    return ("The time right now is " + time());
+  };
+  const triggerNotificationHandler = () => {
+    PushNotification.createChannel(
+      {
+        channelId: "soup_kitchen_resources", // (required)
+        channelName: "Soup Kitchen Resources", // (required)
+        channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+        playSound: false, // (optional) default: true
+        soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+      },
+      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    );
+    PushNotification.localNotificationSchedule({
+      //... You can use all the options from localNotifications
+      channelId: "soup_kitchen_resources",
+      message: messageString(), // (required)
+      date: new Date(Date.now() + 1 * 1000), // in 1 secs
+      allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
+    
+      /* Android Only Properties */
+      repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
+    });
+   };
+
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1}}>
@@ -38,12 +77,12 @@ const HomeScreen = ({navigation}) => {
           <Mytext
             text="Local Resources To Help"
           />
-          {/*
-          <Mybutton
-            title="View"
-            customClick={() => navigation.navigate('View')}
+
+          <Button
+            title="trigger notification"
+            onPress={triggerNotificationHandler}
           />
-          */}
+
           <Mybutton
             title="View All"
             customClick={() => navigation.navigate('ViewAll')}
