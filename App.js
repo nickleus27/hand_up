@@ -9,6 +9,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import HomeScreen from './pages/HomeScreen';
 import ViewAll from './pages/ViewAll';
+import ViewResource from './pages/ViewResource';
 //import View from './pages/View';
 
 const Stack = createStackNavigator();
@@ -31,10 +32,10 @@ const App = () => {
             },
           }}
         />
-        {/*
+        
         <Stack.Screen
-          name="View"
-          component={View}
+          name="ViewResource"
+          component={ViewResource}
           options={{
             title: 'View Resource', //Set Header Title
             headerStyle: {
@@ -46,7 +47,7 @@ const App = () => {
             },
           }}
         />
-        */}
+        
         <Stack.Screen
           name="ViewAll"
           component={ViewAll}
