@@ -10,16 +10,17 @@ import {openDatabase} from 'react-native-sqlite-storage';
 
 //import PushNotification from 'react-native-push-notification';
 import PushNotification, {Importance} from 'react-native-push-notification';
+import { useCallback } from 'react/cjs/react.production.min';
 
 // Connction to access the pre-populated user_db.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
 
 const ViewResource = () => {
 
-  let messageString = () =>{
-    return (userData.org_name + ' is open '+userData.week_day + ' from ' + userData.hour);
+  let messageString = (resource) =>{
+    return (resource.org_name + ' is open '+resource.week_day + ' from ' + resource.hour);
   };
-  const triggerNotificationHandler = () => {
+  const triggerNotificationHandler = (resource) => {
     PushNotification.createChannel(
       {
         channelId: "soup_kitchen_resources", // (required)
@@ -35,7 +36,7 @@ const ViewResource = () => {
     PushNotification.localNotificationSchedule({
       //... You can use all the options from localNotifications
       channelId: "soup_kitchen_resources",
-      message: messageString(), // (required)
+      message: messageString(resource), // (required)
       date: new Date(Date.now() + 1 * 1000), // in 1 secs
       allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
     
@@ -58,10 +59,12 @@ const ViewResource = () => {
           var len = results.rows.length;
           console.log('len', len);
           if (len > 0) {
+            let resource = results.rows.item(0);
+            console.log(resource.org_name);
             setUserData(results.rows.item(0));
-
+            console.log(userData);
             //THIS TRIGGERS NOTIFICATION HERE
-           // triggerNotificationHandler();
+            triggerNotificationHandler(resource);
           } else {
             alert('No resource found');
           }
@@ -73,7 +76,7 @@ const ViewResource = () => {
 
 {/* figure out how to triggerNotificationHandler funtion to be called after userData is set from searchUser funtion with the new data.
 at the moment the notification fires with the data from previous state change*/}
-  let triggerActions = () =>{
+  async function triggerActions (){
     searchUser();
     triggerNotificationHandler();
   }
@@ -87,7 +90,7 @@ at the moment the notification fires with the data from previous state change*/}
             onChangeText={(inputUserId) => setInputUserId(inputUserId)}
             style={{padding: 10}}
           />
-          <Mybutton title="Search resource" customClick={triggerActions} />
+          <Mybutton title="Search resource" customClick={searchUser} />
           <View
             style={{
               marginLeft: 35,
