@@ -10,8 +10,12 @@
 4. npm install @react-navigation/native --save
 5. npm install @react-navigation/stack --save
 6. npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view --save
-7. cd ios && pod install && cd ..
-8. now you can run app in ios or android...npx react-native run-ios, or npx react-native run-android
+7. npm install --save react-native-push-notification
+8. npm install --save @react-native-community/push-notification-ios
+9. cd ios && pod install && cd ..
+10. npx react-native link
+11. npx pod-install
+12. now you can run app in ios or android...npx react-native run-ios, or npx react-native run-android
 
 purpose: an app to help people find resources in a situation of being without job or house: examples: soup kitchens, shelters, work agencies, government resources, aa and na meetings
 
