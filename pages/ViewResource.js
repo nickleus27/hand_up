@@ -2,7 +2,7 @@
 // https://aboutreact.com/example-of-pre-populated-sqlite-database-in-react-native
 // Screen to view single user
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, SafeAreaView} from 'react-native';
 import Mytextinput from './components/Mytextinput';
 import Mybutton from './components/Mybutton';
@@ -10,7 +10,7 @@ import {openDatabase} from 'react-native-sqlite-storage';
 
 //import PushNotification from 'react-native-push-notification';
 import PushNotification, {Importance} from 'react-native-push-notification';
-import { useCallback } from 'react/cjs/react.production.min';
+
 
 // Connction to access the pre-populated user_db.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
@@ -26,7 +26,7 @@ const ViewResource = () => {
         channelId: "soup_kitchen_resources", // (required)
         channelName: "Soup Kitchen Resources", // (required)
         channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-        playSound: false, // (optional) default: true
+        playSound: true, // (optional) default: true
         soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
         importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
         vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
@@ -60,10 +60,7 @@ const ViewResource = () => {
           console.log('len', len);
           if (len > 0) {
             let resource = results.rows.item(0);
-            console.log(resource.org_name);
             setUserData(results.rows.item(0));
-            console.log(userData);
-            //THIS TRIGGERS NOTIFICATION HERE
             triggerNotificationHandler(resource);
           } else {
             alert('No resource found');
@@ -72,14 +69,6 @@ const ViewResource = () => {
       );
     });
   };
-
-
-{/* figure out how to triggerNotificationHandler funtion to be called after userData is set from searchUser funtion with the new data.
-at the moment the notification fires with the data from previous state change*/}
-  async function triggerActions (){
-    searchUser();
-    triggerNotificationHandler();
-  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
