@@ -4,13 +4,13 @@
 import 'react-native-gesture-handler';
 
 import React, {useEffect} from 'react';
+import {Platform} from 'react-native'
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import HomeScreen from './pages/HomeScreen';
 import ViewAll from './pages/ViewAll';
 import ViewResource from './pages/ViewResource';
-//import View from './pages/View';
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
@@ -18,10 +18,12 @@ const Stack = createStackNavigator();
 
 const App = () => {
 
-  useEffect(() => {
-    PushNotificationIOS.requestPermissions();
-  }, [])
-  
+  if(Platform.OS == 'ios'){
+    useEffect(() => {
+      PushNotificationIOS.requestPermissions();
+    }, [])
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="HomeScreen">

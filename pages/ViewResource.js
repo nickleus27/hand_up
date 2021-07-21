@@ -2,12 +2,12 @@
 // https://aboutreact.com/example-of-pre-populated-sqlite-database-in-react-native
 // Screen to view single user
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Text, View, SafeAreaView} from 'react-native';
 import Mytextinput from './components/Mytextinput';
 import Mybutton from './components/Mybutton';
 import {openDatabase} from 'react-native-sqlite-storage';
-
+import FireTime from './bus_log/FireTime';
 //import PushNotification from 'react-native-push-notification';
 import PushNotification, {Importance} from 'react-native-push-notification';
 
@@ -37,7 +37,7 @@ const ViewResource = () => {
       //... You can use all the options from localNotifications
       channelId: "soup_kitchen_resources",
       message: messageString(resource), // (required)
-      date: new Date(Date.now() + 1 * 1000), // in 1 secs
+      date: FireTime.timeFire(resource.hour),//new Date(Date.now() + 1 * 1000), // in 1 secs
       allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
     
       /* Android Only Properties */
@@ -101,7 +101,7 @@ const ViewResource = () => {
             textAlign: 'center',
             color: 'grey'
           }}>
-          Pre-Populated SQLite Database in React Native
+          Hand_Up database
         </Text>
         <Text
           style={{
@@ -109,7 +109,7 @@ const ViewResource = () => {
             textAlign: 'center',
             color: 'grey'
           }}>
-          www.aboutreact.com
+          app still in being developed
         </Text>
       </View>
     </SafeAreaView>
