@@ -43,6 +43,7 @@ const ViewAll = () => {
         <Text>Address: {item.address}</Text>
         <Text>Phone: {item.phone}</Text>
         <Text>Email: {item.email}</Text>
+        <Text>Website: {item.website}</Text>
       </View>
     );
   };

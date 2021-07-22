@@ -48,7 +48,7 @@ const App = () => {
           options={{
             title: 'View Resource', //Set Header Title
             headerStyle: {
-              backgroundColor: '#f4511e', //Set Header color
+              backgroundColor: `#7fffd4`, //Set Header color
             },
             headerTintColor: '#fff', //Set Header text color
             headerTitleStyle: {
