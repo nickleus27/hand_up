@@ -93,6 +93,7 @@ const ViewResource = () => {
             <Text>Address: {userData.address}</Text>
             <Text>Phone: {userData.phone}</Text>
             <Text>Email: {userData.email}</Text>
+            <Text>Website: {userData.website}</Text>
           </View>
         </View>
         <Text

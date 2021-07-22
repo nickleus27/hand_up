@@ -23,7 +23,7 @@ const HomeScreen = ({navigation}) => {
             txn.executeSql('DROP TABLE IF EXISTS soup_kitchen_table', []);
             txn.executeSql(
                 //TODO: LEFT OFF RIGHT HERE
-              'CREATE TABLE IF NOT EXISTS soup_kitchen_table(row_id INTEGER PRIMARY KEY AUTOINCREMENT, org_name VARCHAR(20), week_day VARCHAR(10), HOUR VARCHAR(10), address VARCHAR(255), phone VARCHAR(12), email VARCHAR(255))',
+              'CREATE TABLE IF NOT EXISTS soup_kitchen_table(row_id INTEGER PRIMARY KEY AUTOINCREMENT, org_name VARCHAR(20), week_day VARCHAR(10), hour VARCHAR(10), address VARCHAR(255), phone VARCHAR(12), email VARCHAR(255), website VARCHAR(255))',
               [],
             );
           }
