@@ -88,12 +88,15 @@ console.log(counter);
     console.log('this is counter ' + counter);
     saveData;//saves counter to persistant data
     if(item.isSelect){
+      item.notif = counter.toString();
       triggerNotificationHandler(item, counter.toString());
       updateSelect(item.isSelect, counter.toString(), item.row_id);//updates database to store notification settings
-
+      PushNotification.getScheduledLocalNotifications((notifs)=>{
+        console.log(notifs);
+       });
     }else{
       console.log('i am here ! <----------------')
-      triggerCancelNotifHandler(item.id);
+      triggerCancelNotifHandler(item.notif);//this wont work on ios as is
       updateSelect(item.isSelect, '', item.row_id);//updates database to store notification settings
 
     }
@@ -164,13 +167,17 @@ const timeAhead = 3600000;//1 hour ahead start time
 
     //ADD IOS VERSION HERE <--------------##### THESE METHODS WONT WORK ON IOS...PUSHNOTIFICAITIONIOS
 
+    /*
     PushNotification.getScheduledLocalNotifications((notifs)=>{
       console.log(notifs);
      })
+     */
+    console.log('i am in cancelNotifHandler ' + notifID );
+    console.log({id: notifID});
     PushNotification.cancelLocalNotifications({id: notifID});
-     PushNotification.getScheduledLocalNotifications((notifs)=>{
+    PushNotification.getScheduledLocalNotifications((notifs)=>{
       console.log(notifs);
-     })
+     });
    };
 
   let listItemView = (item) => {
