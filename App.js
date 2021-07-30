@@ -13,6 +13,7 @@ import ViewAll from './pages/ViewAll';
 import ViewResource from './pages/ViewResource';
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification, {Importance} from 'react-native-push-notification';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,23 @@ const App = () => {
   if(Platform.OS == 'ios'){
     useEffect(() => {
       PushNotificationIOS.requestPermissions();
+    }, [])
+  }
+
+  if(Platform.OS == 'android'){
+    useEffect(()=>{
+      PushNotification.createChannel(
+        {
+          channelId: "soup_kitchen_resources", // (required)
+          channelName: "Soup Kitchen Resources", // (required)
+          channelDescription: "A channel to send soup kitchen notifications", // (optional) default: undefined.
+          playSound: true, // (optional) default: true
+          soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+          importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+          vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+        },
+        (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+      );
     }, [])
   }
 
