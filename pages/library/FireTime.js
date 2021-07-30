@@ -3,13 +3,14 @@ class FireTime{
  
     //TODO: change class to return number of milliseconds to add to new Date()
     
+    static testfunc(){
+        console.log("it is working if you see this in console log");
+    }
         static timeFire(string){
             let afternoon = false;
             afternoon = FireTime.isAfternoon(string);
-            console.log(afternoon);
             let startHour = FireTime.hourStringToInt(string)[0];
             let startMins = FireTime.hourStringToInt(string)[1];
-            console.log('hour is ' + startHour + ' min is ' + startMins);
             let fireDate = new Date();
     
             //add days num of days...need to acount for if passed day of week already
@@ -17,33 +18,25 @@ class FireTime{
             const nowday = fireDate.getDay();
             //add hours...check if in afternoon...
             const nowHour = fireDate.getHours();
-            console.log(nowHour + 'is now hour');
             if(afternoon){
                 if(startHour<12){
                     startHour += 12;//convert to 'military' time
                 }
             }
-            console.log('military is ' + startHour);
+
             if(startHour-nowHour<0){//if negative number the hour has already passed
                 startHour = 24+(startHour-nowHour);
             }else{
-                startHour = startHour-nowHour
+                startHour = startHour-nowHour;
             }
-            console.log('after else' + startHour);
+
             //add minutes
             const nowMinutes = fireDate.getMinutes();
 
-
-
-
-            
-            //TODO: NEED TO ADD CODE THAT HANDLES NOTIFICATION MADE ONLY A FEW MINUTES AFTER FIRE TIME
             startMins = startMins - nowMinutes;
-            /*
-            if(startMins != 0){
-                startHour -= 1;
+            if(startHour === 0 && startMins<0){//if notif triggered a few minutes after start time
+                startHour = 24;
             }
-            */
             //fireDate.setHours(fireDate.getHours() +startHour);
             //fireDate.setMinutes(fireDate.getMinutes() + startMins);
             console.log(startHour);
@@ -56,9 +49,7 @@ class FireTime{
     
         };
     
-    
-        //TODO: need to return minutes too!!
-        static hourStringToInt = (string) =>{
+        static hourStringToInt(string){
             //TODO: still need to check bounds and corner cases
             let tempHour = '';
             let tempMin = ''
@@ -90,10 +81,13 @@ class FireTime{
         static isAfternoon(string){
             //TODO: still need to check for bounds and corner cases....example null?...no am or pm???
             let afternoon = false;
-            const length = string.length
+            const length = string.length;
             if (string[length-2] === 'p' || string[length-2] === 'P'){
                 afternoon = true;
             }
             return afternoon;
         };
     }
+
+    //do i need to export this to make it work??
+    export default FireTime;

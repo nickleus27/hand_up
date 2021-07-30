@@ -1,15 +1,15 @@
-// Pre-Populated SQLite Database in React Native
-// https://aboutreact.com/example-of-pre-populated-sqlite-database-in-react-native
-// Screen to view single user
+/* need to move notifications to view all page eventually and use check boxes*/
 
 import React, {useState} from 'react';
 import {Text, View, SafeAreaView} from 'react-native';
 import Mytextinput from './components/Mytextinput';
 import Mybutton from './components/Mybutton';
 import {openDatabase} from 'react-native-sqlite-storage';
-//import FireTime from './bus_log/FireTime';
+import FireTime from './library/FireTime';
 //import PushNotification from 'react-native-push-notification';
-import PushNotification, {Importance} from 'react-native-push-notification';
+import PushNotification from 'react-native-push-notification';
+//import checkboxes for notification selection
+//import CheckBox from '@react-native-community/checkbox';
 
 
 // Connction to access the pre-populated user_db.db
@@ -17,6 +17,9 @@ const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
 
 const ViewResource = () => {
 
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
+  /*
   const timeFire = (string) =>{
     let afternoon = false;
     afternoon = isAfternoon(string);
@@ -39,7 +42,7 @@ const ViewResource = () => {
     if(startHour-nowHour<0){//if negative number the hour has already passed
         startHour = 24+(startHour-nowHour);
     }else{
-        startHour = startHour-nowHour
+        startHour = startHour-nowHour;
     }
  
     //add minutes
@@ -56,10 +59,6 @@ const ViewResource = () => {
     console.log(startHour);
     console.log(startMins);
     return((startHour*3600000)+(startMins*60000));//how many milliseconds until fire date
-
-//https://stackoverflow.com/questions/3572561/set-date-10-days-in-the-future-and-format-to-dd-mm-yyyy-e-g-21-08-2010
-//convert days, hours, minutes....to seconds? or milliseconds?
-//new Date(Date.now() + 1000 /*sec*/ * 60 /*min*/ * 60 /*hour*/ * 24 /*day*/ * 10)
 
 };
 
@@ -98,39 +97,54 @@ const hourStringToInt = (string) =>{
 const isAfternoon = (string) =>{
     //TODO: still need to check for bounds and corner cases....example null?...no am or pm???
     let afternoon = false;
-    const length = string.length
+    const length = string.length;
     if (string[length-2] === 'p' || string[length-2] === 'P'){
         afternoon = true;
     }
     return afternoon;
 };
+*/
 
   let messageString = (resource) =>{
     return (resource.org_name + ' is open '+resource.week_day + ' from ' + resource.hour);
   };
+
+
   const triggerNotificationHandler = (resource) => {
-    PushNotification.createChannel(
-      {
-        channelId: "soup_kitchen_resources", // (required)
-        channelName: "Soup Kitchen Resources", // (required)
-        channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-        playSound: true, // (optional) default: true
-        soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
-        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-      },
-      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-    );
+//ADD PARAMETER FOR OPTION OF CHOOSING START TIME
+//this is a time in miliseconds that notification should start prior to date
+const timeAhead = 3600000;//1 hour ahead start time
+
+
     PushNotification.localNotificationSchedule({
+      
       //... You can use all the options from localNotifications
+      //need to assing notification id, see comment above triggerActivNotif()
       channelId: "soup_kitchen_resources",
+
+      //NEED NOTIFID <--------***
+
       message: messageString(resource), // (required)
-      date: new Date(Date.now()+timeFire(resource.hour)),//new Date(Date.now() + FireTime.timeFire('6:19pm')),//new Date(Date.now() + 1 * 1000), // in 1 secs
+
+
+      //Still cant get FireTime class to work.  want to seperate this functions to just FireTime class so they dont need to be here
+      date: new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), // sets to fire on time of event <------need to set an hour in advance-----###
       allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
     
       /* Android Only Properties */
       repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
+   };
+
+   /* use a counter variable to increment and parse to string for notif id.
+   use notif id for deleting individual notifs.  keep track of id's by keeping variable
+   in list associated with each check box in viewall page.
+   *///SHOULD I NAME THIS CANCEL ALL NOTIFICATIONS?
+   const triggerActivNotif = () =>{
+     PushNotification.getScheduledLocalNotifications((notifs)=>{
+      console.log(notifs);
+     })
+     PushNotification.cancelAllLocalNotifications();
    };
 
   let [inputUserId, setInputUserId] = useState('');
@@ -168,6 +182,17 @@ const isAfternoon = (string) =>{
             style={{padding: 10}}
           />
           <Mybutton title="Search resource" customClick={searchUser} />
+          <Mybutton title="Cancel all active notifications" customClick = {triggerActivNotif} />
+
+          {/* NEED TO COLORIZE CHECK BOX AND CENTER */}
+          {/*}
+          <CheckBox
+          title = 'test check box'
+          disabled={false}
+          value={toggleCheckBox}
+          onValueChange={(newValue) => setToggleCheckBox(newValue)}
+        />
+  */}
           <View
             style={{
               marginLeft: 35,
@@ -178,8 +203,14 @@ const isAfternoon = (string) =>{
             <Text>Organization: {userData.org_name}</Text>
             <Text>Days: {userData.week_day}</Text>
             <Text>Hours: {userData.hour}</Text>
+
+            {/*link to maps */}
             <Text>Address: {userData.address}</Text>
+
+            {/*link to phone dial*/}
             <Text>Phone: {userData.phone}</Text>
+
+            {/* TODO: link to default email*/}
             <Text>Email: {userData.email}</Text>
 
             {/* TODO: MAKE userData.website A CLICKABLE URL LINK*/}
