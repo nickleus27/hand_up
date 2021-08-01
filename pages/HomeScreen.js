@@ -46,8 +46,13 @@ const HomeScreen = ({navigation}) => {
           />
 
           <Mybutton
-            title="View All"
+            title="Resources"
             customClick={() => navigation.navigate('ViewAll')}
+          />
+
+          <Mybutton
+            title="Notification Settings"
+            customClick={() => navigation.navigate('NotifSetting')}
           />
         </View>
         <Text

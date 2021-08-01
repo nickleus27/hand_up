@@ -9,7 +9,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import HomeScreen from './pages/HomeScreen';
-import ViewAll from './pages/ViewAll';
+import ViewAll from './pages/ViewAll'
+import NotifSetting from './pages/NotifSetting';
 import ViewResource from './pages/ViewResource';
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
@@ -74,12 +75,27 @@ const App = () => {
             },
           }}
         />
-        
+
         <Stack.Screen
           name="ViewAll"
           component={ViewAll}
           options={{
-            title: 'View Resources', //Set Header Title
+            title: 'Resources', //Set Header Title
+            headerStyle: {
+              backgroundColor: `#7fffd4`, //Set Header color
+            },
+            headerTintColor: '#fff', //Set Header text color
+            headerTitleStyle: {
+              fontWeight: 'bold', //Set Header text style
+            },
+          }}
+        />
+        
+        <Stack.Screen
+          name="NotifSetting"
+          component={NotifSetting}
+          options={{
+            title: 'Notification Settings', //Set Header Title
             headerStyle: {
               backgroundColor: `#7fffd4`, //Set Header color
             },

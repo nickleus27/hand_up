@@ -5,30 +5,15 @@
 
 
 import React, {useState, useEffect} from 'react';
-import {FlatList, Text, View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native';
+import {FlatList, Text, View, SafeAreaView, Linking, Platform, StyleSheet} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import FireTime from './library/FireTime';
-import PushNotification from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-//import checkboxes for notification selection
-//import CheckBox from '@react-native-community/checkbox';
-
 
 // Connction to access the pre-populated user_db.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
 
-const STORAGE_KEY = '@save_counter';
-//let count = 0;//for persistent upkeep of count:  @react-native-async-storage/async-storage
-let counter = 0;
 const ViewAll = () => {
-  //const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
-readData;//sets counter = to persistent data
-console.log(counter);
 
   let [flatListItems, setFlatListItems] = useState([]);
-  let [refresh, setrefresh] = useState(false);
 
   useEffect(() => {
     db.transaction((tx) => {
@@ -38,17 +23,29 @@ console.log(counter);
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i){
           temp.push(results.rows.item(i));
-          console.log(results.rows.item(i));
+          //console.log(results.rows.item(i));
         }
-        temp.map((item)=>{
-          item.isSelect = (item.isSelect === 'true');
-          return item;
-        });
         setFlatListItems(temp);
         console.log(flatListItems);
       });
     });
   }, []);
+
+  //https://www.devsamples.com/javascript/react-native/open-map-with-prefilled-address
+  //NEED TO CREATE FUNCTION THAT SEPERATES ADRESS, CITY, AND ZIPCODE FROM ADRESS STRING...
+    const openMap = async (address) => {
+    const destination = encodeURIComponent(`${address}`);  
+    const provider = Platform.OS === 'ios' ? 'apple' : 'google'
+    const link = `http://maps.${provider}.com/?daddr=${destination}`;//SHOULD THIS OBJECT BE DESTINATION?
+
+    try {
+        const supported = await Linking.canOpenURL(link);
+
+        if (supported) Linking.openURL(link);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
   let listViewItemSeparator = () => {
@@ -57,159 +54,33 @@ console.log(counter);
     );
   };
 
-  const saveData = async () => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, counter.toString())
-      console.log('Data successfully saved')
-    } catch (e) {
-      console.log('Failed to save the data to the storage')
-    }
-  }
-
-  const readData = async () => {
-    try {
-      const tempCount = await AsyncStorage.getItem(STORAGE_KEY)
-  
-      if (tempCount !== null) {
-        counter = parseInt(tempCount);
-      }else{
-        counter = 0;
-      }
-    } catch (e) {
-      console.log('Failed to fetch the data from storage')
-    }
-  }
-
-  //NEED TO CALL NOTIFICATION HANDLER HERE <-----##
-  let selectItem = (item) => {
-
-    item.isSelect = !item.isSelect;
-    counter = counter+1;//use counter for notif_id
-    console.log('this is counter ' + counter);
-    saveData;//saves counter to persistant data
-    if(item.isSelect){
-      triggerNotificationHandler(item, counter.toString());
-      updateSelect(item.isSelect, counter.toString(), item.row_id);//updates database to store notification settings
-
-    }else{
-      console.log('i am here ! <----------------')
-      triggerCancelNotifHandler(item.id);
-      updateSelect(item.isSelect, '', item.row_id);//updates database to store notification settings
-
-    }
-
-    const index = item.row_id -1;
-    flatListItems[index] = item;
-    setFlatListItems(flatListItems);
-
-    refresh = !refresh;
-    setrefresh(refresh);//refreshes render
-  };
-
-
-  let updateSelect = (itemSelect, itemNotifID, rowID) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        'UPDATE soup_kitchen_table set isSelect=?, notif=? where row_id=?',
-        [itemSelect.toString(), itemNotifID, rowID],
-        (tx, results) => {
-          console.log('Results' + results);
-          if (results.rowsAffected > 0) {
-            console.log(
-              'Success',
-              'User updated successfully',
-              {cancelable: false},
-            );
-          } else console.log('Update Failed');
-        },
-      );
-    });
-  };
-
-
-
-  let messageString = (resource) =>{
-    return (resource.org_name + ' is open '+resource.week_day + ' from ' + resource.hour);
-  };
-
-
-  const triggerNotificationHandler = (resource, notifID) => {
-//ADD PARAMETER FOR OPTION OF CHOOSING START TIME
-
-//this is a time in miliseconds that notification should start prior to date
-const timeAhead = 3600000;//1 hour ahead start time
-
-
-//ADD if platiform.OS == .... for different schedulers<<<<<---------------#########
-//ADD IOS SPECIFIC SCHEDULER HERE<------------###
-
-
-    PushNotification.localNotificationSchedule({
-      //TITLE
-      //... You can use all the options from localNotifications
-      channelId: "soup_kitchen_resources",
-      id: notifID,
-      message: messageString(resource), // (required)
-      date: new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), //timeFire returns milliseconds until date, and timeAhead is milliseconds prior to date
-      allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
-    
-      /* Android Only Properties */
-      repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
-    });
-   };
-
-//trigers cancelation of notification with id
-   const triggerCancelNotifHandler = (notifID) =>{
-
-
-    //ADD IOS VERSION HERE <--------------##### THESE METHODS WONT WORK ON IOS...PUSHNOTIFICAITIONIOS
-
-    PushNotification.getScheduledLocalNotifications((notifs)=>{
-      console.log(notifs);
-     })
-    PushNotification.cancelLocalNotifications({id: notifID});
-     PushNotification.getScheduledLocalNotifications((notifs)=>{
-      console.log(notifs);
-     })
-   };
 
   let listItemView = (item) => {
     return (
-      <TouchableOpacity 
-      style={item.isSelect ? styles.selected : styles.list}      
-      onPress={() => 
-        selectItem(item)}
-
-        //start switching notification calls to hear.  need a counter variable to keep track of notication_id...could keep a corresponding array for this too?
-        //or a map for this...probably a map <----##
-      
-       >
+        <View>
         <Text>Id: {item.row_id}</Text>
         <Text>Organization: {item.org_name}</Text>
         <Text>Days: {item.week_day}</Text>
         <Text>Hours: {item.hour}</Text>
-        <Text>Address: {item.address}</Text>
-        <Text>Phone: {item.phone}</Text>
-        <Text>Email: {item.email}</Text>
-        <Text>Website: {item.website}</Text>
         <Text
-          style = {{textAlign : 'center',
-                    fontSize : 18,
-                    color : '#48d1cc'}}> Notifications: {item.isSelect ? 'ON' : 'OFF'}</Text>
-
-        {/*NEED TO FIND HOW TO HAVE EACH INDIVIDUAL BOX CHECK SEPERATELY AND NOT ALL SIMULTANEOUSLY
-        MAYBE BECAUSE OF THE USE STATE TOGGLE AT TOP OF PAGE??  ALSO NEED TO BE ABLE TO CALL FUNCTION 
-        ACCORDING TO TURE OR FALSE STATE.  US ONPRESS ATTRICBUTE.  ALSO NEED TO KEEP TRACK OF NOTIFICATION
-        ID WHEN SCHEDLOCALNOTIF GETS CALLED SO IT CAN BE DELETED WHEN UNCHECK */}
-        {/*
-        <CheckBox
-          disabled={false}
-          value={toggleCheckBox}
-          onValueChange={(newValue) => setToggleCheckBox(newValue)}
-        />
-        */}
-
-      </TouchableOpacity>
+            style={styles.maplinkStyle}
+            onPress={()=>{openMap(item.address);
+                  }}>
+            Address: {item.address}</Text>
+        <Text
+            style={styles.phonelinkStyle}
+            onPress={() => {
+              Linking.openURL(`tel:${item.phone}`);
+            }}>
+            Phone: {item.phone}</Text>
+        <Text>Email: {item.email}</Text>
+        <Text
+            style={styles.hyperlinkStyle}
+            onPress={() => {
+              Linking.openURL(item.website);
+            }}>
+            Website: {item.website}</Text>
+      </View>
     );
   };
 
@@ -222,7 +93,6 @@ const timeAhead = 3600000;//1 hour ahead start time
             ItemSeparatorComponent={listViewItemSeparator}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => listItemView(item)}
-            extraData = {refresh}
           />
         </View>
         <Text
@@ -251,6 +121,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0ffff",
   },
   selected: {backgroundColor: "#ba55d3"},
+  hyperlinkStyle: {
+    color: 'blue',
+  },
+  phonelinkStyle: {
+    color: 'green',
+  },
+  maplinkStyle: {
+    color: 'orange',
+  },
 });
 
 export default ViewAll;
