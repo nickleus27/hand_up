@@ -5,7 +5,7 @@
 
 
 import React, {useState, useEffect} from 'react';
-import {FlatList, Text, View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native';
+import {FlatList, Text, View, SafeAreaView, TouchableOpacity, Platform, StyleSheet} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FireTime from './library/FireTime';
@@ -18,9 +18,8 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 // Connction to access the pre-populated user_db.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
 
-const STORAGE_KEY = '@save_counter';
-//let count = 0;//for persistent upkeep of count:  @react-native-async-storage/async-storage
-let counter = 0;
+const STORAGE_KEY = '@save_counter';//for persistent upkeep of count:  @react-native-async-storage/async-storage
+let counter = 0;//let count = 0;
 const NotifSetting = () => {
   //const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
@@ -142,11 +141,16 @@ console.log(counter);
 //this is a time in miliseconds that notification should start prior to date
 const timeAhead = 3600000;//1 hour ahead start time
 
-
-//ADD if platiform.OS == .... for different schedulers<<<<<---------------#########
-//ADD IOS SPECIFIC SCHEDULER HERE<------------###
-
-
+  if(Platform.OS === 'ios'){//ios notifications
+    PushNotificationIOS.addNotificationRequest({
+      id: notifID,
+      title: 'Hand Up',
+      body: messageString(resource),
+      category: 'Hand Up',
+      fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead),
+      repeats: true,
+    });
+  }else{//android notifications
     PushNotification.localNotificationSchedule({
       //TITLE
       //... You can use all the options from localNotifications
@@ -159,7 +163,8 @@ const timeAhead = 3600000;//1 hour ahead start time
       /* Android Only Properties */
       repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
-   };
+  }
+};
 
 //trigers cancelation of notification with id
    const triggerCancelNotifHandler = (notifID) =>{
@@ -172,12 +177,24 @@ const timeAhead = 3600000;//1 hour ahead start time
       console.log(notifs);
      })
      */
-    console.log('i am in cancelNotifHandler ' + notifID );
-    console.log({id: notifID});
-    PushNotification.cancelLocalNotifications({id: notifID});
-    PushNotification.getScheduledLocalNotifications((notifs)=>{
+     console.log('i am in cancelNotifHandler ' + notifID);
+
+     if(Platform.OS === 'ios'){//ios cancel notification
+      PushNotificationIOS.removePendingNotificationRequests([notifID]);
+      PushNotificationIOS.getPendingNotificationRequests((requests) => {
+        console.log('Push Notification Received', JSON.stringify(requests), [
+          {
+            text: 'Dismiss',
+            onPress: null,
+          },
+        ]);
+      });
+     }else{//android cancel notification
+      PushNotification.cancelLocalNotifications({id: notifID});
+      PushNotification.getScheduledLocalNotifications((notifs)=>{
       console.log(notifs);
      });
+    }
    };
 
   let listItemView = (item) => {
