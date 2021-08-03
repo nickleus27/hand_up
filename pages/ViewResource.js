@@ -4,6 +4,7 @@
  ****USING CANCEL ALL NOTIFICATIONS ON THIS PAGE WILL MESS UP APP
  ****IF USED FOR TESTING WILL NEED TO UNIINSTALL AND REINSTALL APP  
  */
+ "use strict";
 
 import React, {useState} from 'react';
 import {Text, View, SafeAreaView, Platform} from 'react-native';
@@ -44,7 +45,7 @@ if(Platform.OS === 'ios'){//ios notification
     title: 'Hand Up',
     body: messageString(resource),
     category: 'Hand Up',
-    fireDate: new Date(Date.now() + 1000),//FireTime.timeFire(resource.hour)-timeAhead),
+    fireDate: new Date(Date.now() + (1000*60*5)),//FireTime.timeFire(resource.hour)-timeAhead),
     repeats: true,
   });
 }else{//android notification

@@ -1,8 +1,10 @@
 /*  Nicholas Anderson
 **  July 2021
-**  this page is to select notification settings for sc resource database for people experiencing houselessness
+**  this page is to view a list of local resources
+**  and to link resource phone number to phone, web url to web browser, and address to maps
 */
 
+"use strict";
 
 import React, {useState, useEffect} from 'react';
 import {FlatList, Text, View, SafeAreaView, Linking, Platform, StyleSheet} from 'react-native';
