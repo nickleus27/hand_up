@@ -20,13 +20,50 @@ const Stack = createStackNavigator();
 
 const App = () => {
 
-  if(Platform.OS == 'ios'){
+  useEffect(()=>{
+    if(Platform.OS === 'ios'){
+      PushNotificationIOS.requestPermissions().then(
+        (data) => {
+          console.log('PushNotificationIOS.requestPermissions', data);
+        },
+        (data) => {
+          console.log('PushNotificationIOS.requestPermissions failed', data);
+        },
+      );
+    }
+    if(Platform.OS === 'android'){
+      PushNotification.createChannel(
+        {
+          channelId: "soup_kitchen_resources", // (required)
+          channelName: "Soup Kitchen Resources", // (required)
+          channelDescription: "A channel to send soup kitchen notifications", // (optional) default: undefined.
+          playSound: true, // (optional) default: true
+          soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+          importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+          vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+        },
+        (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+      );
+    }
+  }, [])
+/*
+  if(Platform.OS === 'ios'){
     useEffect(() => {
-      PushNotificationIOS.requestPermissions();
+      PushNotificationIOS.requestPermissions().then(
+        (data) => {
+          console.log('PushNotificationIOS.requestPermissions', data);
+        },
+        (data) => {
+          console.log('PushNotificationIOS.requestPermissions failed', data);
+        },
+      );
+      
+      //PushNotificationIOS.requestPermissions();
+      
     }, [])
   }
 
-  if(Platform.OS == 'android'){
+  if(Platform.OS === 'android'){
     useEffect(()=>{
       PushNotification.createChannel(
         {
@@ -42,7 +79,7 @@ const App = () => {
       );
     }, [])
   }
-
+*/
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="HomeScreen">

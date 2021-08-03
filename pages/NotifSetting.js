@@ -4,10 +4,15 @@
 */
 
 
+/**
+ * should uninstall unused packages, AsyncStorage and CheckBox
+ */
+"use strict";
+
 import React, {useState, useEffect} from 'react';
-import {FlatList, Text, View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native';
+import {FlatList, Text, View, SafeAreaView, TouchableOpacity, Platform, StyleSheet} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import FireTime from './library/FireTime';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
@@ -15,17 +20,18 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 //import CheckBox from '@react-native-community/checkbox';
 
 
-// Connction to access the pre-populated user_db.db
+// Connction to access the pre-populated soup_kitchen_sc.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
-
-const STORAGE_KEY = '@save_counter';
-//let count = 0;//for persistent upkeep of count:  @react-native-async-storage/async-storage
+/*
+const STORAGE_KEY = '@save_counter';//for persistent upkeep of count:  @react-native-async-storage/async-storage
 let counter = 0;
+*/
 const NotifSetting = () => {
   //const [toggleCheckBox, setToggleCheckBox] = useState(false);
-
+/*
 readData;//sets counter = to persistent data
 console.log(counter);
+*/
 
   let [flatListItems, setFlatListItems] = useState([]);
   let [refresh, setrefresh] = useState(false);
@@ -57,6 +63,7 @@ console.log(counter);
     );
   };
 
+  /*
   const saveData = async () => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, counter.toString())
@@ -79,25 +86,28 @@ console.log(counter);
       console.log('Failed to fetch the data from storage')
     }
   }
+  */
 
   //NEED TO CALL NOTIFICATION HANDLER HERE <-----##
   let selectItem = (item) => {
 
     item.isSelect = !item.isSelect;
+    /*
     counter = counter+1;//use counter for notif_id
     console.log('this is counter ' + counter);
     saveData;//saves counter to persistant data
+    */
     if(item.isSelect){
-      item.notif = counter.toString();
-      triggerNotificationHandler(item, counter.toString());
-      updateSelect(item.isSelect, counter.toString(), item.row_id);//updates database to store notification settings
+      //item.notif = counter.toString();
+      triggerNotificationHandler(item);//, counter.toString());
+      updateSelect(item);//item.isSelect, counter.toString(), item.row_id);//updates database to store notification settings
       PushNotification.getScheduledLocalNotifications((notifs)=>{
         console.log(notifs);
        });
     }else{
       console.log('i am here ! <----------------')
-      triggerCancelNotifHandler(item.notif);//this wont work on ios as is
-      updateSelect(item.isSelect, '', item.row_id);//updates database to store notification settings
+      triggerCancelNotifHandler(item.row_id.toString());//this wont work on ios as is
+      updateSelect(item);//item.isSelect, '', item.row_id);//updates database to store notification settings
 
     }
 
@@ -110,11 +120,11 @@ console.log(counter);
   };
 
 
-  let updateSelect = (itemSelect, itemNotifID, rowID) => {
+  let updateSelect = (resource) => {//itemSelect, itemNotifID, rowID) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'UPDATE soup_kitchen_table set isSelect=?, notif=? where row_id=?',
-        [itemSelect.toString(), itemNotifID, rowID],
+        'UPDATE soup_kitchen_table set isSelect=? where row_id=?',  //, notif=? where row_id=?',
+        [resource.isSelect.toString(), resource.row_id.toString()],//itemNotifID, rowID],
         (tx, results) => {
           console.log('Results' + results);
           if (results.rowsAffected > 0) {
@@ -136,22 +146,27 @@ console.log(counter);
   };
 
 
-  const triggerNotificationHandler = (resource, notifID) => {
+  const triggerNotificationHandler = (resource)=>{ //, notifID) => {
 //ADD PARAMETER FOR OPTION OF CHOOSING START TIME
 
 //this is a time in miliseconds that notification should start prior to date
 const timeAhead = 3600000;//1 hour ahead start time
 
-
-//ADD if platiform.OS == .... for different schedulers<<<<<---------------#########
-//ADD IOS SPECIFIC SCHEDULER HERE<------------###
-
-
+  if(Platform.OS === 'ios'){//ios notifications
+    PushNotificationIOS.addNotificationRequest({
+      id: resource.row_id.toString(),//notifID,
+      title: 'Hand Up',
+      body: messageString(resource),
+      category: 'Hand Up',
+      fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead),
+      repeats: true,
+    });
+  }else{//android notifications
     PushNotification.localNotificationSchedule({
       //TITLE
       //... You can use all the options from localNotifications
       channelId: "soup_kitchen_resources",
-      id: notifID,
+      id: resource.row_id.toString(),//notifID,
       message: messageString(resource), // (required)
       date: new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), //timeFire returns milliseconds until date, and timeAhead is milliseconds prior to date
       allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
@@ -159,7 +174,8 @@ const timeAhead = 3600000;//1 hour ahead start time
       /* Android Only Properties */
       repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
-   };
+  }
+};
 
 //trigers cancelation of notification with id
    const triggerCancelNotifHandler = (notifID) =>{
@@ -172,12 +188,24 @@ const timeAhead = 3600000;//1 hour ahead start time
       console.log(notifs);
      })
      */
-    console.log('i am in cancelNotifHandler ' + notifID );
-    console.log({id: notifID});
-    PushNotification.cancelLocalNotifications({id: notifID});
-    PushNotification.getScheduledLocalNotifications((notifs)=>{
+     console.log('i am in cancelNotifHandler ' + notifID);
+
+     if(Platform.OS === 'ios'){//ios cancel notification
+      PushNotificationIOS.removePendingNotificationRequests([notifID]);
+      PushNotificationIOS.getPendingNotificationRequests((requests) => {
+        console.log('Push Notification Received', JSON.stringify(requests), [
+          {
+            text: 'Dismiss',
+            onPress: null,
+          },
+        ]);
+      });
+     }else{//android cancel notification
+      PushNotification.cancelLocalNotifications({id: notifID});
+      PushNotification.getScheduledLocalNotifications((notifs)=>{
       console.log(notifs);
      });
+    }
    };
 
   let listItemView = (item) => {

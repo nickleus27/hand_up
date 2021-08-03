@@ -1,5 +1,7 @@
-// Pre-Populated SQLite Database in React Native
-// https://aboutreact.com/example-of-pre-populated-sqlite-database-in-react-native
+/**
+ * homescreen to navigate between pages
+ */
+ "use strict";
 
 import React, {useEffect} from 'react';
 import {View, Text, SafeAreaView} from 'react-native';
@@ -23,7 +25,7 @@ const HomeScreen = ({navigation}) => {
             txn.executeSql('DROP TABLE IF EXISTS soup_kitchen_table', []);
             txn.executeSql(
                 //TODO: LEFT OFF RIGHT HERE
-              'CREATE TABLE IF NOT EXISTS soup_kitchen_table(row_id INTEGER PRIMARY KEY AUTOINCREMENT, org_name VARCHAR(20), week_day VARCHAR(10), hour VARCHAR(10), address VARCHAR(255), phone VARCHAR(12), email VARCHAR(255), website VARCHAR(255), isSelect VARCHAR(5), notif VARCHAR(12))',
+              'CREATE TABLE IF NOT EXISTS soup_kitchen_table(row_id INTEGER PRIMARY KEY AUTOINCREMENT, org_name VARCHAR(20), week_day VARCHAR(10), hour VARCHAR(10), address VARCHAR(255), phone VARCHAR(12), email VARCHAR(255), website VARCHAR(255), isSelect VARCHAR(5))',
               [],
             );
           }
