@@ -45,18 +45,20 @@ if(Platform.OS === 'ios'){//ios notification
     title: 'Hand Up',
     body: messageString(resource),
     category: 'Hand Up',
-    fireDate: new Date(Date.now() + (1000*60*5)),//FireTime.timeFire(resource.hour)-timeAhead),
+    fireDate: new Date(Date.now() + (1000)),//FireTime.timeFire(resource.hour)-timeAhead),
     repeats: true,
   });
 }else{//android notification
     PushNotification.localNotificationSchedule({
       channelId: "soup_kitchen_resources",
+      data: {daysArr: [1,2,3]},
       message: messageString(resource), // (required)
-      date: new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), // sets to fire on time of event <------need to set an hour in advance-----###
+      date:  new Date(Date.now() + (1000)),//new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), // sets to fire on time of event <------need to set an hour in advance-----###
       allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
+      userInteraction: false, //HOW TO MAKE NOTIF FIRE WITHOUT CLICKING NOTIF
     
       /* Android Only Properties */
-      repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
+      repeatType: false, // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
   }
    };
