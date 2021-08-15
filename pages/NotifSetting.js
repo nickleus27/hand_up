@@ -168,11 +168,11 @@ const timeAhead = 3600000;//1 hour ahead start time
       channelId: "soup_kitchen_resources",
       id: resource.row_id.toString(),//notifID,
       message: messageString(resource), // (required)
-      date: new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), //timeFire returns milliseconds until date, and timeAhead is milliseconds prior to date
+      date: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead), //timeFire returns milliseconds until date, and timeAhead is milliseconds prior to date
       allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
     
       /* Android Only Properties */
-      repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
+      repeatType: (FireTime.isEveryday(resource.week_day)) ? "day" : "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
   }
 };
