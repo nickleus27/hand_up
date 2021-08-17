@@ -33,9 +33,10 @@ const NotifSetting = () => {
 readData;//sets counter = to persistent data
 console.log(counter);
 */
-  let notif = new NotifService();//<-------------------#5
+  //let notif = new NotifService();//<-------------------#5
   let [flatListItems, setFlatListItems] = useState([]);
   let [refresh, setrefresh] = useState(false);
+  let [notif, setnotif] = useState([]);
 
   useEffect(() => {
     db.transaction((tx) => {
@@ -58,9 +59,9 @@ console.log(counter);
   }, []);
 
   //<------------###3
-  //useEffect(() => {
-    
-  //}, []);
+  useEffect(() => {
+    setnotif(new NotifService());
+  }, []);
 
 
   let listViewItemSeparator = () => {
