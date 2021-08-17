@@ -13,9 +13,10 @@ import React, {useState, useEffect} from 'react';
 import {FlatList, Text, View, SafeAreaView, TouchableOpacity, Platform, StyleSheet} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
-import FireTime from './library/FireTime';
+//import FireTime from './library/FireTime';
 import PushNotification from 'react-native-push-notification';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
+//import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import NotifService from './library/NotifService';
 //import checkboxes for notification selection
 //import CheckBox from '@react-native-community/checkbox';
 
@@ -32,7 +33,7 @@ const NotifSetting = () => {
 readData;//sets counter = to persistent data
 console.log(counter);
 */
-
+  let notif = new NotifService();//<-------------------#5
   let [flatListItems, setFlatListItems] = useState([]);
   let [refresh, setrefresh] = useState(false);
 
@@ -55,6 +56,11 @@ console.log(counter);
       });
     });
   }, []);
+
+  //<------------###3
+  //useEffect(() => {
+    
+  //}, []);
 
 
   let listViewItemSeparator = () => {
@@ -99,14 +105,14 @@ console.log(counter);
     */
     if(item.isSelect){
       //item.notif = counter.toString();
-      triggerNotificationHandler(item);//, counter.toString());
+      notif.triggerNotificationHandler(item);//, counter.toString());
       updateSelect(item);//item.isSelect, counter.toString(), item.row_id);//updates database to store notification settings
       PushNotification.getScheduledLocalNotifications((notifs)=>{
         console.log(notifs);
        });
     }else{
       console.log('i am here ! <----------------')
-      triggerCancelNotifHandler(item.row_id.toString());//this wont work on ios as is
+      notif.triggerCancelNotifHandler(item.row_id.toString());//this wont work on ios as is
       updateSelect(item);//item.isSelect, '', item.row_id);//updates database to store notification settings
 
     }
@@ -140,38 +146,48 @@ console.log(counter);
   };
 
 
-
+/* 2 <-----###
   let messageString = (resource) =>{
     return (resource.org_name + ' is open '+resource.week_day + ' from ' + resource.hour);
   };
+*/
 
-
+  /*  #----> 1 <----#
   const triggerNotificationHandler = (resource)=>{ //, notifID) => {
 //ADD PARAMETER FOR OPTION OF CHOOSING START TIME
 
 //this is a time in miliseconds that notification should start prior to date
 const timeAhead = 3600000;//1 hour ahead start time
 
+
+
+//NEED TO SET THIS UP LIKE THE ELSE STATEMENT BELOW FOR ANDROID
+//NEED SET UP FOR NON DAILY REPEATING NOTIFICATIONS
   if(Platform.OS === 'ios'){//ios notifications
     PushNotificationIOS.addNotificationRequest({
       id: resource.row_id.toString(),//notifID,
+      userInfo: {id: resource.row_id.toString(), hour: resource.hour, week_day: resource.week_day, },
       title: 'Hand Up',
       body: messageString(resource),
       category: 'Hand Up',
-      fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead),
-      repeats: true,
+      fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead),
+      repeats: (FireTime.isEveryday(resource.week_day)) ? true : false,
     });
+
+
+
   }else{//android notifications
     PushNotification.localNotificationSchedule({
       //TITLE
       //... You can use all the options from localNotifications
       channelId: "soup_kitchen_resources",
       id: resource.row_id.toString(),//notifID,
+      data: {hour: resource.hour, week_day: resource.week_day, },//data to travel with notif for onNotification in configure
       message: messageString(resource), // (required)
       date: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead), //timeFire returns milliseconds until date, and timeAhead is milliseconds prior to date
       allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
     
-      /* Android Only Properties */
+      / Android Only Properties
       repeatType: (FireTime.isEveryday(resource.week_day)) ? "day" : "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
   }
@@ -183,11 +199,11 @@ const timeAhead = 3600000;//1 hour ahead start time
 
     //ADD IOS VERSION HERE <--------------##### THESE METHODS WONT WORK ON IOS...PUSHNOTIFICAITIONIOS
 
-    /*
-    PushNotification.getScheduledLocalNotifications((notifs)=>{
-      console.log(notifs);
-     })
-     */
+    
+    //PushNotification.getScheduledLocalNotifications((notifs)=>{
+    //  console.log(notifs);
+    // })
+     
      console.log('i am in cancelNotifHandler ' + notifID);
 
      if(Platform.OS === 'ios'){//ios cancel notification
@@ -207,6 +223,7 @@ const timeAhead = 3600000;//1 hour ahead start time
      });
     }
    };
+###-------END OF COMMENT #1------->*/
 
   let listItemView = (item) => {
     return (

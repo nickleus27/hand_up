@@ -9,7 +9,6 @@ import Mybutton from './components/Mybutton';
 import Mytext from './components/Mytext';
 import {openDatabase} from 'react-native-sqlite-storage';
 
-
 // Connction to access the pre-populated user_db.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
 
