@@ -9,6 +9,7 @@ class FireTime{
     static timeFire(hourString, dayString){//DAYOFWEEK IS daysOpenArray or hashMap
         let afternoon = false;
         //afternoon = FireTime.isAfternoon(string);
+        console.log(hourString);
         const data = FireTime.hourStringToInt(hourString);
         let startHour = data[0];
         let startMins = data[1];
@@ -71,22 +72,36 @@ class FireTime{
 
                 const start = dayMap.get(dayStrArr[0]);
                 const end = dayMap.get(dayStrArr[2]);
-                for(let i = start; i != end+1; i++){
-                    console.log("here");
+                console.log("this is day string arr " + dayStrArr);
+                console.log('this is dayMap' + dayMap);
+                console.log("this is end " + end);
+                let loopsEnd = end+1;
+                if(loopsEnd >= dayArr.length){
+                    loopsEnd = 0;
+                }
+                console.log("this is " + dayString);
+                console.log("this is start " + start + " this is end " + loopsEnd);
+                for(let i = start; i != loopsEnd; i++){
+                    console.log(i);
                     if(i>=dayArr.length){
                         i = 0;
+                        dayArr[i] = true;
+                        i -= 1;
+                    }else{
+                        dayArr[i] = true;
                     }
-                    dayArr[i] = true;
                 }
             }
         }
+        console.log(dayArr);
         return dayArr;
     }
 
     static calc_min_time(startHour, startMins, afternoon, fireDate, dayString){
-        console.log(dayString);
+        console.log("this is fireDate " + fireDate);
+        console.log("this is dayString in calc_min_time " + dayString);
         const daysOpenArr = FireTime.dayArrFunc(dayString);
-        console.log(daysOpenArr);
+        console.log("this is daysOpenArr in calc_min_time " + daysOpenArr);
         let min_time = 604800000;//miliseconds in a week
         for(let i = 0; i<7; i++){
             if(daysOpenArr[i]===false){
@@ -95,7 +110,7 @@ class FireTime{
             const nowDay = fireDate.getDay();
             let startDay = i - nowDay;
             if(startDay<0){//if day is behind nowDay add a weeks amount time to make up for negative difference
-                startDay = 7 + startDay;//miliseconds in a week
+                startDay = 7 + startDay;
             }
             
             //add hours...check if in afternoon...
@@ -113,7 +128,7 @@ class FireTime{
       
             //add minutes
             const nowMinutes = fireDate.getMinutes();
-    
+            console.log("this is now minutes " + nowMinutes);
             startMins = startMins - nowMinutes;
  
             //fireDate.setHours(fireDate.getHours() +startHour);
@@ -124,10 +139,11 @@ class FireTime{
             const startTime = (startHour*3600000)+(startMins*60000)+ (startDay*86400000);
             console.log("this is the total of all those times " + startTime);
             //return((startHour*3600000)+(startMins*60000));//how many milliseconds until fire date
-            if(startTime < min_time){//NEED TO ALSO CHECK IF DAY IS IN daysOpenArr passed to this function
+            if(startTime >= 0 && startTime < min_time){//NEED TO ALSO CHECK IF DAY IS IN daysOpenArr passed to this function
                 min_time = startTime;
             }
         }
+        console.log("this is the min_time: " + min_time);
         return min_time;
     }
     
@@ -149,7 +165,7 @@ class FireTime{
                 tempMin += string[index];
             }else{
                 while(index < string.length){
-                    console.log(string[index]);
+                    console.log("this is string[index] in hoursToInt " + string[index]);
                     if(string[index]==='p' || string[index]==='P'){
                         isAfternoon = true;
                         break;

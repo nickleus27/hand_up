@@ -35,30 +35,32 @@ const ViewResource = () => {
   const triggerNotificationHandler = (resource) => {
 //ADD PARAMETER FOR OPTION OF CHOOSING START TIME
 //this is a time in miliseconds that notification should start prior to date
-const timeAhead = 3600000;//1 hour ahead start time
+console.log("this is resource id to string " + resource.row_id.toString())
 
 if(Platform.OS === 'ios'){//ios notification
   //this is only a test notification<--------------###
   console.log('i am here in ios')
   PushNotificationIOS.addNotificationRequest({
-    id: 'test',
+    id: resource.row_id.toString(),//notifID,
+    userInfo: {id: resource.row_id.toString(), hour: resource.hour, week_day: resource.week_day, },
     title: 'Hand Up',
     body: messageString(resource),
     category: 'Hand Up',
-    fireDate: new Date(Date.now() + (1000)),//FireTime.timeFire(resource.hour)-timeAhead),
-    repeats: true,
+    fireDate: new Date(Date.now() + (1000)),
+    repeats: (FireTime.isEveryday(resource.week_day)) ? true : false,
   });
 }else{//android notification
     PushNotification.localNotificationSchedule({
+      id: resource.row_id.toString(),//notifID,
       channelId: "soup_kitchen_resources",
-      data: {daysArr: [1,2,3]},
+      data: {hour: resource.hour, week_day: resource.week_day, },
       message: messageString(resource), // (required)
       date:  new Date(Date.now() + (1000)),//new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), // sets to fire on time of event <------need to set an hour in advance-----###
       allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
-      userInteraction: false, //HOW TO MAKE NOTIF FIRE WITHOUT CLICKING NOTIF
+      //userInteraction: false, //HOW TO MAKE NOTIF FIRE WITHOUT CLICKING NOTIF
     
       /* Android Only Properties */
-      repeatType: false, // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
+      repeatType: (FireTime.isEveryday(resource.week_day)) ? "day" : "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
   }
    };
