@@ -42,7 +42,7 @@ if(Platform.OS === 'ios'){//ios notification
   console.log('i am here in ios')
   PushNotificationIOS.addNotificationRequest({
     id: resource.row_id.toString(),//notifID,
-    userInfo: {id: resource.row_id.toString(), hour: resource.hour, week_day: resource.week_day, },
+    userInfo: {repeats: (FireTime.isEveryday(resource.week_day)) ? true : false, id: resource.row_id.toString(), hour: resource.hour, week_day: resource.week_day, },
     title: 'Hand Up',
     body: messageString(resource),
     category: 'Hand Up',

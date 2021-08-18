@@ -23,9 +23,8 @@ export default class NotifService {
         if(Platform.OS === 'ios'){//ios notifications
             PushNotificationIOS.addNotificationRequest({
               id: resource.row_id.toString(),//notifID,
-              userInfo: {id: resource.row_id.toString(), hour: resource.hour, week_day: resource.week_day, },
-              title: 'Hand Up',
-              body: messageString(resource),
+              userInfo: {repeats: (FireTime.isEveryday(resource.week_day)) ? true : false, id: resource.row_id.toString(), hour: resource.hour, week_day: resource.week_day, },              title: 'Hand Up',
+              body: this.messageString(resource),
               category: 'Hand Up',
               fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead),
               repeats: (FireTime.isEveryday(resource.week_day)) ? true : false,
@@ -82,7 +81,4 @@ export default class NotifService {
         return (resource.org_name + ' is open '+resource.week_day + ' from ' + resource.hour);
     };
 
-    handleNotificationOpen = ({navigation}) => {
-        navigation.navigate('ViewResource');
-    }
 }
