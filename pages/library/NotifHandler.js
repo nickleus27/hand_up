@@ -14,7 +14,7 @@ PushNotification.configure({
     console.log("TOKEN:", token);
   },
 */
-userInteraction: false,
+//userInteraction: false,
   // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
     console.log("NOTIFICATION and configure are working:", notification);

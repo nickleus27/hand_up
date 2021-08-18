@@ -8,8 +8,6 @@ class FireTime{
 
     static timeFire(hourString, dayString){//DAYOFWEEK IS daysOpenArray or hashMap
         let afternoon = false;
-        //afternoon = FireTime.isAfternoon(string);
-        console.log(hourString);
         const data = FireTime.hourStringToInt(hourString);
         let startHour = data[0];
         let startMins = data[1];
@@ -17,12 +15,6 @@ class FireTime{
         console.log("afternoon is " + afternoon);
         let fireDate = new Date();
     
-        //add days num of days...need to acount for if passed day of week already
-        //if()
-        //const nowday = fireDate.getDay();
-        if(dayString !== "Everyday"){
-            return FireTime.calc_min_time(startHour, startMins, afternoon, fireDate, dayString);
-        }
         //add hours...check if in afternoon...
         const nowHour = fireDate.getHours();
         if(afternoon){
@@ -44,8 +36,9 @@ class FireTime{
         if(startHour === 0 && startMins<0){//if notif triggered a few minutes after start time
             startHour = 24;
         }
-        //fireDate.setHours(fireDate.getHours() +startHour);
-        //fireDate.setMinutes(fireDate.getMinutes() + startMins);
+        if(dayString !== "Everyday"){
+            return FireTime.calc_min_time(startHour, startMins, afternoon, fireDate, dayString);
+        }
         console.log("this is hours " + startHour);
         console.log("this is minutes " + startMins);
         return((startHour*3600000)+(startMins*60000));//how many milliseconds until fire date
@@ -107,36 +100,31 @@ class FireTime{
             if(daysOpenArr[i]===false){
                 continue;
             }
+
             const nowDay = fireDate.getDay();
-            let startDay = i - nowDay;
-            if(startDay<0){//if day is behind nowDay add a weeks amount time to make up for negative difference
-                startDay = 7 + startDay;
+            let startDay = i;
+
+            if(nowDay === 0){ //convert sundays to 7
+                nowDay = 7;
             }
-            
-            //add hours...check if in afternoon...
-            const nowHour = fireDate.getHours();
-            if(afternoon){
-                if(startHour<12){
-                    startHour += 12;//convert to 'military' time
-                }
-            }else if(startHour === 12){
-                startHour = 0;
+            if(startDay === 0){//convert sundays to 7
+                startDay = 7;
             }
-            
-    
-            startHour = startHour-nowHour;
-      
-            //add minutes
-            const nowMinutes = fireDate.getMinutes();
-            console.log("this is now minutes " + nowMinutes);
-            startMins = startMins - nowMinutes;
- 
-            //fireDate.setHours(fireDate.getHours() +startHour);
-            //fireDate.setMinutes(fireDate.getMinutes() + startMins);
-            console.log("this is hours " + startHour);
-            console.log("this is mins " + startMins);
-            console.log("this is days " + startDay);
+            startDay = startDay - nowDay;
+            if(startDay < 0){//if day is behind current day in the week add a week to the negative number
+                startDay += 7;
+            }
+            if(startDay === 1){//use values passed into function for startTime they are already correct. Dont need to add a day if only a day ahead.
+                startDay = 0;
+            }
+            if(startDay >= 2){//if startTime is more than a day away subtract a day from total days since startHour and startMins passed into this function already calculated a day into future
+                startDay -= 1
+            }
+
             const startTime = (startHour*3600000)+(startMins*60000)+ (startDay*86400000);
+            console.log("this is starthour " +  startHour);
+            console.log("this is startmins " + startMins);
+            console.log("this is startday " + startDay);
             console.log("this is the total of all those times " + startTime);
             //return((startHour*3600000)+(startMins*60000));//how many milliseconds until fire date
             if(startTime >= 0 && startTime < min_time){//NEED TO ALSO CHECK IF DAY IS IN daysOpenArr passed to this function
