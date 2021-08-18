@@ -17,7 +17,7 @@ import ViewResource from './pages/ViewResource';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification, {Importance} from 'react-native-push-notification';
 
-import FireTime from './pages/library/FireTime';
+//import FireTime from './pages/library/FireTime';
 
 const Stack = createStackNavigator();
 
@@ -137,6 +137,7 @@ const App = () => {
     }
   }, [])
 
+  /*
   if(Platform.OS === 'ios'){
     useEffect(() => {
       PushNotificationIOS.requestPermissions().then(
@@ -169,6 +170,7 @@ const App = () => {
       );
     }, [])
   }
+  */
 
   return (
     <NavigationContainer>

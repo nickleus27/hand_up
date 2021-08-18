@@ -10,7 +10,7 @@
 "use strict";
 
 import React, {useState, useEffect} from 'react';
-import {FlatList, Text, View, SafeAreaView, TouchableOpacity, Platform, StyleSheet} from 'react-native';
+import {FlatList, Text, View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 //import FireTime from './library/FireTime';
@@ -33,7 +33,7 @@ const NotifSetting = () => {
 readData;//sets counter = to persistent data
 console.log(counter);
 */
-  //let notif = new NotifService();//<-------------------#5
+
   let [flatListItems, setFlatListItems] = useState([]);
   let [refresh, setrefresh] = useState(false);
   let [notif, setnotif] = useState([]);
@@ -92,6 +92,13 @@ console.log(counter);
     } catch (e) {
       console.log('Failed to fetch the data from storage')
     }
+  }
+  */
+
+  /*
+  _handleNotificationOpen = () =>{
+    const {navigate} = this.props.navigation;
+    navigate('ViewAll');
   }
   */
 

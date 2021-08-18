@@ -19,8 +19,7 @@ PushNotification.configure({
   onNotification: function (notification) {
     console.log("NOTIFICATION and configure are working:", notification);
     console.log("this is data object " + notification.data.hour + " and " + notification.data.week_day);
-    console.log('this is id ' + notification.id)
-    //------------------>handlelNotification(notification)
+    //handlelNotification(notification);
     const timeAhead = 3600000;//1 hour ahead start time
 
     //NEED TO SET UP FOR IOS<--------------###
