@@ -2,12 +2,13 @@ import PushNotification from 'react-native-push-notification';
 import {Platform} from 'react-native'
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { setupPushNotification } from './NotifHandler';
+import {navigate} from './RootNavigation';
 import FireTime from './FireTime';
 
 
 export default class NotifService {
-    constructor(){//{navigation}){
-        this.pushNotification = setupPushNotification();//this.handleNotificationOpen({navigation}));
+    constructor(){
+        this.pushNotification = setupPushNotification(this.handleNotificationOpen);//this.handleNotificationOpen({navigation}));
     }
     triggerNotificationHandler = (resource)=>{ //, notifID) => {
         console.log(resource);
@@ -16,10 +17,6 @@ export default class NotifService {
         //this is a time in miliseconds that notification should start prior to date
         const timeAhead = 3600000;//1 hour ahead start time
         
-        
-        
-        //NEED TO SET THIS UP LIKE THE ELSE STATEMENT BELOW FOR ANDROID
-        //NEED SET UP FOR NON DAILY REPEATING NOTIFICATIONS
         if(Platform.OS === 'ios'){//ios notifications
             PushNotificationIOS.addNotificationRequest({
               id: resource.row_id.toString(),//notifID,
@@ -29,9 +26,6 @@ export default class NotifService {
               fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead),
               repeats: (FireTime.isEveryday(resource.week_day)) ? true : false,
             });
-        
-        
-
         }else{//android notifications
             PushNotification.localNotificationSchedule({
               //TITLE
@@ -50,14 +44,6 @@ export default class NotifService {
     };
     triggerCancelNotifHandler = (notifID) =>{
 
-
-            //ADD IOS VERSION HERE <--------------##### THESE METHODS WONT WORK ON IOS...PUSHNOTIFICAITIONIOS
-        
-            /*
-            PushNotification.getScheduledLocalNotifications((notifs)=>{
-              console.log(notifs);
-             })
-             */
         console.log('i am in cancelNotifHandler ' + notifID);
         
         if(Platform.OS === 'ios'){//ios cancel notification
@@ -77,8 +63,36 @@ export default class NotifService {
             });
         }
     };
+
+    //message to be displayed in notification
     messageString = (resource)=>{
         return (resource.org_name + ' is open '+resource.week_day + ' from ' + resource.hour);
     };
 
+    //displays scheduled local notifications in console
+    scheduledNotifications = () => {
+
+        if(Platform.OS === 'android'){
+            PushNotification.getScheduledLocalNotifications((notifs)=>{
+                console.log(notifs);
+            });
+        }else{
+            PushNotificationIOS.getPendingNotificationRequests((requests) => {
+                console.log('Push Notification Received', JSON.stringify(requests), [
+                    {
+                        text: 'Dismiss',
+                        onPress: null,
+                    },
+                ]);
+            });
+        }
+    };
+
+    handleNotificationOpen = () =>{
+        console.log('i am in handleNotificationOpen')
+        //const {navigate} = this.props.navigation;
+        //navigate('ViewAll');
+        navigate('ViewAll', {} );
+    }
+    
 }

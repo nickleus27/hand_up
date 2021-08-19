@@ -2,9 +2,7 @@
 class FireTime{
  
     //TODO:  NEED TO BETTER COMMENT CODE. ESPECIALLY hourStringToInt
-    //TODO: HOW TO PASS DAYS OPEN TO THIS FUNCTION
-    //TODO: NEED TO PROCESS DAYS OPEN STRING FROM DATABASE TO CREATE A MAPPING
-    //use an array of 7 bool elements and if index is true the day is open
+    //TODO: need to delete all the console.log() <---------------##
 
     static timeFire(hourString, dayString){//DAYOFWEEK IS daysOpenArray or hashMap
         let afternoon = false;

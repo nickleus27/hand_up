@@ -7,6 +7,7 @@ import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
 import {Platform} from 'react-native'
 import {NavigationContainer} from '@react-navigation/native';
+import { navigationRef } from './pages/library/RootNavigation';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import HomeScreen from './pages/HomeScreen';
@@ -137,43 +138,8 @@ const App = () => {
     }
   }, [])
 
-  /*
-  if(Platform.OS === 'ios'){
-    useEffect(() => {
-      PushNotificationIOS.requestPermissions().then(
-        (data) => {
-          console.log('PushNotificationIOS.requestPermissions', data);
-        },
-        (data) => {
-          console.log('PushNotificationIOS.requestPermissions failed', data);
-        },
-      );
-      
-      //PushNotificationIOS.requestPermissions();
-      
-    }, [])
-  }
-
-  if(Platform.OS === 'android'){
-    useEffect(()=>{
-      PushNotification.createChannel(
-        {
-          channelId: "soup_kitchen_resources", // (required)
-          channelName: "Soup Kitchen Resources", // (required)
-          channelDescription: "A channel to send soup kitchen notifications", // (optional) default: undefined.
-          playSound: true, // (optional) default: true
-          soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
-          importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-          vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-        },
-        (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-      );
-    }, [])
-  }
-  */
-
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen
           name="HomeScreen"
