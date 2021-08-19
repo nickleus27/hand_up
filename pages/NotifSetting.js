@@ -10,19 +10,16 @@
 "use strict";
 
 import React, {useState, useEffect} from 'react';
-import {FlatList, Text, View, SafeAreaView, TouchableOpacity, Platform, StyleSheet} from 'react-native';
+import {FlatList, Text, View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 //import AsyncStorage from '@react-native-async-storage/async-storage';
-//import FireTime from './library/FireTime';
-import PushNotification from 'react-native-push-notification';
-//import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import NotifService from './library/NotifService';
-//import checkboxes for notification selection
 //import CheckBox from '@react-native-community/checkbox';
 
 
 // Connction to access the pre-populated soup_kitchen_sc.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
+let notif = new NotifService();
 /*
 const STORAGE_KEY = '@save_counter';//for persistent upkeep of count:  @react-native-async-storage/async-storage
 let counter = 0;
@@ -33,10 +30,9 @@ const NotifSetting = () => {
 readData;//sets counter = to persistent data
 console.log(counter);
 */
-  //let notif = new NotifService();//<-------------------#5
+
   let [flatListItems, setFlatListItems] = useState([]);
   let [refresh, setrefresh] = useState(false);
-  let [notif, setnotif] = useState([]);
 
   useEffect(() => {
     db.transaction((tx) => {
@@ -58,11 +54,15 @@ console.log(counter);
     });
   }, []);
 
-  //<------------###3
-  useEffect(() => {
-    setnotif(new NotifService());
-  }, []);
+  /*
+  const handleNotificationOpen = () =>{
+    //const {navigate} = this.props.navigation;
+    //navigate('ViewAll');
+    navigation.navigate('ViewAll');
+  }
+  */
 
+  
 
   let listViewItemSeparator = () => {
     return (
@@ -95,7 +95,6 @@ console.log(counter);
   }
   */
 
-  //NEED TO CALL NOTIFICATION HANDLER HERE <-----##
   let selectItem = (item) => {
 
     item.isSelect = !item.isSelect;
@@ -106,15 +105,12 @@ console.log(counter);
     */
     if(item.isSelect){
       //item.notif = counter.toString();
-      notif.triggerNotificationHandler(item);//, counter.toString());
-      updateSelect(item);//item.isSelect, counter.toString(), item.row_id);//updates database to store notification settings
-      PushNotification.getScheduledLocalNotifications((notifs)=>{
-        console.log(notifs);
-       });
+      notif.triggerNotificationHandler(item);
+      updateSelect(item);
     }else{
       console.log('i am here ! <----------------')
-      notif.triggerCancelNotifHandler(item.row_id.toString());//this wont work on ios as is
-      updateSelect(item);//item.isSelect, '', item.row_id);//updates database to store notification settings
+      notif.triggerCancelNotifHandler(item.row_id.toString());
+      updateSelect(item);
 
     }
 
@@ -146,86 +142,6 @@ console.log(counter);
     });
   };
 
-
-/* 2 <-----###
-  let messageString = (resource) =>{
-    return (resource.org_name + ' is open '+resource.week_day + ' from ' + resource.hour);
-  };
-*/
-
-  /*  #----> 1 <----#
-  const triggerNotificationHandler = (resource)=>{ //, notifID) => {
-//ADD PARAMETER FOR OPTION OF CHOOSING START TIME
-
-//this is a time in miliseconds that notification should start prior to date
-const timeAhead = 3600000;//1 hour ahead start time
-
-
-
-//NEED TO SET THIS UP LIKE THE ELSE STATEMENT BELOW FOR ANDROID
-//NEED SET UP FOR NON DAILY REPEATING NOTIFICATIONS
-  if(Platform.OS === 'ios'){//ios notifications
-    PushNotificationIOS.addNotificationRequest({
-      id: resource.row_id.toString(),//notifID,
-      userInfo: {id: resource.row_id.toString(), hour: resource.hour, week_day: resource.week_day, },
-      title: 'Hand Up',
-      body: messageString(resource),
-      category: 'Hand Up',
-      fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead),
-      repeats: (FireTime.isEveryday(resource.week_day)) ? true : false,
-    });
-
-
-
-  }else{//android notifications
-    PushNotification.localNotificationSchedule({
-      //TITLE
-      //... You can use all the options from localNotifications
-      channelId: "soup_kitchen_resources",
-      id: resource.row_id.toString(),//notifID,
-      data: {hour: resource.hour, week_day: resource.week_day, },//data to travel with notif for onNotification in configure
-      message: messageString(resource), // (required)
-      date: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead), //timeFire returns milliseconds until date, and timeAhead is milliseconds prior to date
-      allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
-    
-      / Android Only Properties
-      repeatType: (FireTime.isEveryday(resource.week_day)) ? "day" : "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
-    });
-  }
-};
-
-//trigers cancelation of notification with id
-   const triggerCancelNotifHandler = (notifID) =>{
-
-
-    //ADD IOS VERSION HERE <--------------##### THESE METHODS WONT WORK ON IOS...PUSHNOTIFICAITIONIOS
-
-    
-    //PushNotification.getScheduledLocalNotifications((notifs)=>{
-    //  console.log(notifs);
-    // })
-     
-     console.log('i am in cancelNotifHandler ' + notifID);
-
-     if(Platform.OS === 'ios'){//ios cancel notification
-      PushNotificationIOS.removePendingNotificationRequests([notifID]);
-      PushNotificationIOS.getPendingNotificationRequests((requests) => {
-        console.log('Push Notification Received', JSON.stringify(requests), [
-          {
-            text: 'Dismiss',
-            onPress: null,
-          },
-        ]);
-      });
-     }else{//android cancel notification
-      PushNotification.cancelLocalNotifications({id: notifID});
-      PushNotification.getScheduledLocalNotifications((notifs)=>{
-      console.log(notifs);
-     });
-    }
-   };
-###-------END OF COMMENT #1------->*/
-
   let listItemView = (item) => {
     return (
       <TouchableOpacity 
@@ -249,19 +165,6 @@ const timeAhead = 3600000;//1 hour ahead start time
           style = {{textAlign : 'center',
                     fontSize : 18,
                     color : '#48d1cc'}}> Notifications: {item.isSelect ? 'ON' : 'OFF'}</Text>
-
-        {/*NEED TO FIND HOW TO HAVE EACH INDIVIDUAL BOX CHECK SEPERATELY AND NOT ALL SIMULTANEOUSLY
-        MAYBE BECAUSE OF THE USE STATE TOGGLE AT TOP OF PAGE??  ALSO NEED TO BE ABLE TO CALL FUNCTION 
-        ACCORDING TO TURE OR FALSE STATE.  US ONPRESS ATTRICBUTE.  ALSO NEED TO KEEP TRACK OF NOTIFICATION
-        ID WHEN SCHEDLOCALNOTIF GETS CALLED SO IT CAN BE DELETED WHEN UNCHECK */}
-        {/*
-        <CheckBox
-          disabled={false}
-          value={toggleCheckBox}
-          onValueChange={(newValue) => setToggleCheckBox(newValue)}
-        />
-        */}
-
       </TouchableOpacity>
     );
   };

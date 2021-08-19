@@ -3,9 +3,8 @@ import {Platform} from 'react-native'
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import FireTime from './FireTime';
 
-export function setupPushNotification(handlelNotification){
+export function setupPushNotification(handleNotification){
 //NEED TO CONFIGURE CORRECTLY FOR ANDROID AND IOS
-//NEED TO BE ABLE TO CALCULATE THE CORRECT NEXT FIRE TIME
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
   /*
@@ -14,18 +13,15 @@ PushNotification.configure({
     console.log("TOKEN:", token);
   },
 */
-//userInteraction: false,
+
   // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
     console.log("NOTIFICATION and configure are working:", notification);
     console.log("this is data object " + notification.data.hour + " and " + notification.data.week_day);
-    console.log('this is id ' + notification.id)
-    //------------------>handlelNotification(notification)
+    handleNotification(notification);
     const timeAhead = 3600000;//1 hour ahead start time
 
-    //NEED TO SET UP FOR IOS<--------------###
     if(Platform.OS === 'android' && notification.repeatType === ""){//android notification
-      //this is only a test notification<--------------###
       PushNotification.localNotificationSchedule({
         id: notification.id,
         channelId: "soup_kitchen_resources",
@@ -33,7 +29,6 @@ PushNotification.configure({
         message: notification.message, // (required)
         date:  new Date(Date.now() + FireTime.timeFire(notification.data.hour, notification.data.week_day)-timeAhead),//new Date(Date.now() + (1000)),//new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), // sets to fire on time of event <------need to set an hour in advance-----###
         allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
-        //userInteraction: false,//??? not working
         /* Android Only Properties */
         repeatType: "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
       });
@@ -49,7 +44,6 @@ PushNotification.configure({
           repeats: notification.data.repeats,
         });
     }
-    // process the notification
 
     // (required) Called when a remote is received or opened, or local notification is opened
     notification.finish(PushNotificationIOS.FetchResult.NoData);

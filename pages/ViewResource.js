@@ -15,16 +15,19 @@ import FireTime from './library/FireTime';
 //import PushNotification from 'react-native-push-notification';
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+
+
 //import checkboxes for notification selection
 //import CheckBox from '@react-native-community/checkbox';
 
 
 // Connction to access the pre-populated user_db.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
+//let notif = new NotifService();
 
 const ViewResource = () => {
 
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  //const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
 
   let messageString = (resource) =>{
@@ -98,6 +101,24 @@ if(Platform.OS === 'ios'){//ios notification
     });
   };
 
+  const scheduledNotifications = () => {
+
+    if(Platform.OS === 'android'){
+        PushNotification.getScheduledLocalNotifications((notifs)=>{
+            console.log(notifs);
+        });
+    }else{
+        PushNotificationIOS.getPendingNotificationRequests((requests) => {
+            console.log('Push Notification Received', JSON.stringify(requests), [
+                {
+                    text: 'Dismiss',
+                    onPress: null,
+                },
+            ]);
+        });
+    }
+};
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1}}>
@@ -109,16 +130,7 @@ if(Platform.OS === 'ios'){//ios notification
           />
           <Mybutton title="Search resource" customClick={searchUser} />
           <Mybutton title="Cancel all active notifications" customClick = {triggerActivNotif} />
-
-          {/* NEED TO COLORIZE CHECK BOX AND CENTER */}
-          {/*}
-          <CheckBox
-          title = 'test check box'
-          disabled={false}
-          value={toggleCheckBox}
-          onValueChange={(newValue) => setToggleCheckBox(newValue)}
-        />
-  */}
+          <Mybutton title="Get Scheduled Notifications in console" customClick = {scheduledNotifications} />
           <View
             style={{
               marginLeft: 35,
