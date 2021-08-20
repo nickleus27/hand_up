@@ -2,6 +2,7 @@ import PushNotification from 'react-native-push-notification';
 import {Platform} from 'react-native'
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import FireTime from './FireTime';
+import {navigate} from './RootNavigation';
 
 export function setupPushNotification(handleNotification){
 //NEED TO CONFIGURE CORRECTLY FOR ANDROID AND IOS
@@ -17,8 +18,13 @@ PushNotification.configure({
   // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
     console.log("NOTIFICATION and configure are working:", notification);
-    console.log("this is data object " + notification.data.hour + " and " + notification.data.week_day);
-    handleNotification(notification);
+    let notificationID;
+    if(Platform.OS === 'android'){//android
+      notificationID = JSON.stringify(parseInt(notification.id));
+    }else{//ios
+      notificationID = JSON.stringify(parseInt(notification.data.id));
+    }
+    handleNotification(notificationID);
     const timeAhead = 3600000;//1 hour ahead start time
 
     if(Platform.OS === 'android' && notification.repeatType === ""){//android notification
@@ -87,4 +93,5 @@ PushNotification.configure({
   
    requestPermissions: Platform.OS === 'ios',
 });
+
 }

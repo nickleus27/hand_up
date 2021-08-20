@@ -10,7 +10,6 @@ class FireTime{
         let startHour = data[0];
         let startMins = data[1];
         afternoon = data[2];
-        console.log("afternoon is " + afternoon);
         let fireDate = new Date();
     
         //add hours...check if in afternoon...
@@ -63,17 +62,11 @@ class FireTime{
 
                 const start = dayMap.get(dayStrArr[0]);
                 const end = dayMap.get(dayStrArr[2]);
-                console.log("this is day string arr " + dayStrArr);
-                console.log('this is dayMap' + dayMap);
-                console.log("this is end " + end);
                 let loopsEnd = end+1;
                 if(loopsEnd >= dayArr.length){
                     loopsEnd = 0;
                 }
-                console.log("this is " + dayString);
-                console.log("this is start " + start + " this is end " + loopsEnd);
                 for(let i = start; i != loopsEnd; i++){
-                    console.log(i);
                     if(i>=dayArr.length){
                         i = 0;
                         dayArr[i] = true;
@@ -84,15 +77,11 @@ class FireTime{
                 }
             }
         }
-        console.log(dayArr);
         return dayArr;
     }
 
     static calc_min_time(startHour, startMins, afternoon, fireDate, dayString){
-        console.log("this is fireDate " + fireDate);
-        console.log("this is dayString in calc_min_time " + dayString);
         const daysOpenArr = FireTime.dayArrFunc(dayString);
-        console.log("this is daysOpenArr in calc_min_time " + daysOpenArr);
         let min_time = 604800000;//miliseconds in a week
         for(let i = 0; i<7; i++){
             if(daysOpenArr[i]===false){
@@ -151,7 +140,6 @@ class FireTime{
                 tempMin += string[index];
             }else{
                 while(index < string.length){
-                    console.log("this is string[index] in hoursToInt " + string[index]);
                     if(string[index]==='p' || string[index]==='P'){
                         isAfternoon = true;
                         break;
