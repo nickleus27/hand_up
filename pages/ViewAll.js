@@ -75,7 +75,11 @@ const ViewAll = () => {
               Linking.openURL(`tel:${item.phone}`);
             }}>
             Phone: {item.phone}</Text>
-        <Text>Email: {item.email}</Text>
+        <Text
+            style={styles.hyperlinkStyle}
+            onPress={()=> {
+              Linking.openURL(`mailto:${item.email}`);}}>
+          Email: {item.email}</Text>
         <Text
             style={styles.hyperlinkStyle}
             onPress={() => {

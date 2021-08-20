@@ -11,7 +11,6 @@ export default class NotifService {
         this.pushNotification = setupPushNotification(this.handleNotificationOpen);//this.handleNotificationOpen({navigation}));
     }
     triggerNotificationHandler = (resource)=>{ //, notifID) => {
-        console.log(resource);
         //ADD PARAMETER FOR OPTION OF CHOOSING START TIME
         
         //this is a time in miliseconds that notification should start prior to date
@@ -43,8 +42,6 @@ export default class NotifService {
         }
     };
     triggerCancelNotifHandler = (notifID) =>{
-
-        console.log('i am in cancelNotifHandler ' + notifID);
         
         if(Platform.OS === 'ios'){//ios cancel notification
             PushNotificationIOS.removePendingNotificationRequests([notifID]);
@@ -88,11 +85,9 @@ export default class NotifService {
         }
     };
 
-    handleNotificationOpen = () =>{
-        console.log('i am in handleNotificationOpen')
-        //const {navigate} = this.props.navigation;
-        //navigate('ViewAll');
-        navigate('ViewAll', {} );
+    handleNotificationOpen = (notificationID) =>{
+        notificationID = JSON.stringify(parseInt(notificationID));
+        navigate('SingleResourceView', {id: notificationID});
     }
     
 }

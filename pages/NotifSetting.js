@@ -42,27 +42,15 @@ console.log(counter);
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i){
           temp.push(results.rows.item(i));
-          console.log(results.rows.item(i));
         }
         temp.map((item)=>{
           item.isSelect = (item.isSelect === 'true');
           return item;
         });
         setFlatListItems(temp);
-        console.log(flatListItems);
       });
     });
   }, []);
-
-  /*
-  const handleNotificationOpen = () =>{
-    //const {navigate} = this.props.navigation;
-    //navigate('ViewAll');
-    navigation.navigate('ViewAll');
-  }
-  */
-
-  
 
   let listViewItemSeparator = () => {
     return (
@@ -108,7 +96,6 @@ console.log(counter);
       notif.triggerNotificationHandler(item);
       updateSelect(item);
     }else{
-      console.log('i am here ! <----------------')
       notif.triggerCancelNotifHandler(item.row_id.toString());
       updateSelect(item);
 
