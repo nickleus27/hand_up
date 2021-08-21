@@ -50,6 +50,7 @@ console.log(counter);
         setFlatListItems(temp);
       });
     });
+    alert('When setting a notification it will set for an hour ahead of time. If setting resource that is opening in the next hour, the notification will set for the next day open. To reactivate notification for resources that do not open everyday, you will have to open the notifciation when you receive it. If you did not open notification you will have to turn notification off and back on in settings to reactivate it.');
   }, []);
 
   let listViewItemSeparator = () => {

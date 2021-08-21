@@ -24,8 +24,8 @@ PushNotification.configure({
     }else{//ios
       notificationID = JSON.stringify(parseInt(notification.data.id));
     }
+    
     handleNotification(notificationID);
-    const timeAhead = 3600000;//1 hour ahead start time
 
     if(Platform.OS === 'android' && notification.repeatType === ""){//android notification
       PushNotification.localNotificationSchedule({
@@ -33,7 +33,7 @@ PushNotification.configure({
         channelId: "soup_kitchen_resources",
         data: {hour: notification.data.hour, week_day: notification.data.week_day,},
         message: notification.message, // (required)
-        date:  new Date(Date.now() + FireTime.timeFire(notification.data.hour, notification.data.week_day)-timeAhead),//new Date(Date.now() + (1000)),//new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), // sets to fire on time of event <------need to set an hour in advance-----###
+        date:  new Date(Date.now() + FireTime.timeFire(notification.data.hour, notification.data.week_day)),//new Date(Date.now() + (1000)),//new Date(Date.now() + FireTime.timeFire(resource.hour)-timeAhead), // sets to fire on time of event <------need to set an hour in advance-----###
         allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
         /* Android Only Properties */
         repeatType: "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
@@ -46,7 +46,7 @@ PushNotification.configure({
           title: 'Hand Up',
           body: notification.message,
           category: 'Hand Up',
-          fireDate: new Date(Date.now() + FireTime.timeFire(notification.data.hour, notification.data.week_day)-timeAhead),
+          fireDate: new Date(Date.now() + FireTime.timeFire(notification.data.hour, notification.data.week_day)),
           repeats: notification.data.repeats,
         });
     }
