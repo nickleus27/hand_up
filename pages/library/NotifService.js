@@ -13,16 +13,13 @@ export default class NotifService {
     triggerNotificationHandler = (resource)=>{ //, notifID) => {
         //ADD PARAMETER FOR OPTION OF CHOOSING START TIME
         
-        //this is a time in miliseconds that notification should start prior to date
-        const timeAhead = 3600000;//1 hour ahead start time
-        
         if(Platform.OS === 'ios'){//ios notifications
             PushNotificationIOS.addNotificationRequest({
               id: resource.row_id.toString(),//notifID,
               userInfo: {repeats: (FireTime.isEveryday(resource.week_day)) ? true : false, id: resource.row_id.toString(), hour: resource.hour, week_day: resource.week_day, },              title: 'Hand Up',
               body: this.messageString(resource),
               category: 'Hand Up',
-              fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead),
+              fireDate: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)),
               repeats: (FireTime.isEveryday(resource.week_day)) ? true : false,
             });
         }else{//android notifications
@@ -33,7 +30,7 @@ export default class NotifService {
               id: resource.row_id.toString(),//notifID,
               data: {hour: resource.hour, week_day: resource.week_day, },//data to travel with notif for onNotification in configure
               message: this.messageString(resource), // (required)
-              date: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)-timeAhead), //timeFire returns milliseconds until date, and timeAhead is milliseconds prior to date
+              date: new Date(Date.now() + FireTime.timeFire(resource.hour, resource.week_day)), //timeFire returns milliseconds until date, and timeAhead is milliseconds prior to date
               allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
             
               /* Android Only Properties */
