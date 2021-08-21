@@ -130,7 +130,7 @@ class FireTime{
                     console.log("has already passed for today");
                     continue;
                 }
-                if(startHour === 0 && startMins < 0){//already has passed today minutes ago
+                if(startHour === 24 && startMins < 0){//already has passed today minutes ago
                     console.log("has already passed for today");
                     continue;
                 }
