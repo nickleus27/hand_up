@@ -1,4 +1,16 @@
 "use strict";
+
+/**
+ * Have done much testing to see if this works correctly.
+ * However, an error happened that I explain in comment at top of NotifSetting.js
+ * Ever since this error program has been working wonky.
+ * At this point I think I need to uninstall and reinstall app and start testing over again.
+ * 
+ * 
+ * The error said a something about a Promise, and hourStringToInt returned Undefined??
+ * I made mistake of not recording error...
+ */
+
 const timeAhead = 3600000;
 class FireTime{
  
@@ -28,6 +40,17 @@ class FireTime{
             }
         }
 
+
+        /** test this to see if it works
+         * this should adjust 12:00 AM to 24:00
+         * if(!afternoon){
+         *      if(startHour === 12){
+         *          startHour =24;
+         *  }
+         * }
+         */
+
+        
         if(startHour-nowHour<0){//if negative number the hour has already passed
             startHour = 24+(startHour-nowHour);//add 24hours
             passedHour = true;
