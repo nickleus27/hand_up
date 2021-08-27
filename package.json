@@ -14,7 +14,7 @@
     "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/push-notification-ios": "^1.8.0",
-    "@react-navigation/native": "^5.9.4",
+    "@react-navigation/native": "^6.0.2",
     "@react-navigation/stack": "^5.14.5",
     "install": "^0.13.0",
     "npm": "^7.19.1",

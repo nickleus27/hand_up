@@ -18,10 +18,16 @@ import SingleResourceView from './pages/SingleResourceView';
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification, {Importance} from 'react-native-push-notification';
+//import NotifService from './pages/library/NotifService';
 
-//import FireTime from './pages/library/FireTime';
 
-const Stack = createStackNavigator();
+let Stack = createStackNavigator();
+
+
+//let notif = new NotifService();//does this need to be here.  handleNotifOpened
+//doesn't navigate to SingleResourceScreen everytime you click on notification.
+
+//console.log("This is App.js");
 
 const App = () => {
 

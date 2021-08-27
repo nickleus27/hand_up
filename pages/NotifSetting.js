@@ -6,6 +6,19 @@
 
 /**
  * should uninstall unused packages, AsyncStorage and CheckBox
+ * 
+ * ON ANDROID:
+ * TODO: WHEN TURNED PHONE OFF AND ON, SCHEDULED NOTIFICATIONS THAT WERE NOT SET TO DAILY
+ * REPEAT SEEMED TO BE LOST IN NOTIFICATION CENTER WHEN OUTPUT TO CONSOLE LOG.  NOTICED
+ * BECAUSE NON-REPEATING NOTIFICATIONS DID NOT FIRE AND ONE DID BUT LOST ITS DATA.HOUR ATTRIBUTE/PROPERTY
+ * 
+ * tried restarting again and this time notification without daily repeat was still there
+ * Not sure why had error of undefined in hourStringToInt in FireTime, and why all non
+ * repeating notifications were gone??
+ * 
+ * handleNotifOpen doesn't open singleResource screen everytime???
+ * 
+ * apparently global statements in NotifSetting.js get called before global statements in App.js
  */
 "use strict";
 
@@ -20,6 +33,9 @@ import NotifService from './library/NotifService';
 // Connction to access the pre-populated soup_kitchen_sc.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
 let notif = new NotifService();
+
+//console.log("this is NotifSetting.js");
+
 /*
 const STORAGE_KEY = '@save_counter';//for persistent upkeep of count:  @react-native-async-storage/async-storage
 let counter = 0;
