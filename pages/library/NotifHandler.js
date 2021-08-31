@@ -2,7 +2,7 @@ import PushNotification from 'react-native-push-notification';
 import {Platform} from 'react-native'
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import FireTime from './FireTime';
-import {navigate} from './RootNavigation';
+//import {navigate} from './RootNavigation';
 
 export function setupPushNotification(handleNotification){
 //NEED TO CONFIGURE CORRECTLY FOR ANDROID AND IOS

@@ -1,6 +1,7 @@
 // RootNavigation.js
 
 import { createNavigationContainerRef } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native'
 
 export const navigationRef = createNavigationContainerRef();
 
@@ -16,7 +17,7 @@ export function navigate(name, params) {
     }
     return navigationRef.isReady();
   }
-  navIsReady().then(navigationRef.navigate(name, params));
+  navIsReady().then(navigationRef.dispatch(StackActions.push(name, params)));
 
   /*
 //HOW TO ASYNCHRONOUSLY AWAIT FOR isReady to be true??
