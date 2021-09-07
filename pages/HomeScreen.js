@@ -11,11 +11,6 @@ import {openDatabase} from 'react-native-sqlite-storage';
 
 // Connction to access the pre-populated user_db.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
-//should NotificationService//Push.configure() be called here or in app??
-//doesn't work all the time in NotifSetting, but not also in Aop.js
-
-
-//console.log("this is HomeScreen.js");
 
 const HomeScreen = ({navigation}) => {
   useEffect(() => {

@@ -1,5 +1,8 @@
-// Pre-Populated SQLite Database in React Native
-// https://aboutreact.com/example-of-pre-populated-sqlite-database-in-react-native
+/**Nick Anderson
+ * 2021
+ * An app that uses SQLite to store a database of Resources for people experiencing
+ * houselessness.
+ */
 "use strict";
 
 import 'react-native-gesture-handler';
@@ -18,8 +21,6 @@ import SingleResourceView from './pages/SingleResourceView';
 
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification, {Importance} from 'react-native-push-notification';
-//import NotifService from './pages/library/NotifService';
-
 
 let Stack = createStackNavigator();
 

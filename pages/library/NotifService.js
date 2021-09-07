@@ -8,7 +8,7 @@ import FireTime from './FireTime';
 
 export default class NotifService {
     constructor(){
-        this.pushNotification = setupPushNotification(this.handleNotificationOpen);//this.handleNotificationOpen({navigation}));
+        this.pushNotification = setupPushNotification(this.handleNotificationOpen);
     }
     triggerNotificationHandler = (resource)=>{ //, notifID) => {
         //ADD PARAMETER FOR OPTION OF CHOOSING START TIME
