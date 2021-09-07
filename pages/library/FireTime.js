@@ -15,11 +15,6 @@ const timeAhead = 3600000;
 class FireTime{
  
     //TODO:  NEED TO BETTER COMMENT CODE. ESPECIALLY hourStringToInt
-  /*
-    static get timeAhead(){
-        return timeAhead;
-    }
-    */
 
     static timeFire(hourString, dayString){//DAYOFWEEK IS daysOpenArray or hashMap
         let afternoon = false;
@@ -82,16 +77,11 @@ class FireTime{
             startTime += 86400000; //milliseconds in 1 day; 24 hours
         }
         return startTime;//how many milliseconds until fire date
-        
-        //https://stackoverflow.com/questions/3572561/set-date-10-days-in-the-future-and-format-to-dd-mm-yyyy-e-g-21-08-2010
-        //convert days, hours, minutes....to seconds? or milliseconds?
-        //new Date(Date.now() + 1000 /*sec*/ * 60 /*min*/ * 60 /*hour*/ * 24 /*day*/ * 10)
     
     };
 
-
-    //NEED TO CHECK FOR CORNER CASES AND BOUNDS CHECKING
-    //NEED TO ADD CODE FOR SINGLE DAYS, ETC
+    //Function returns array of which days are open
+    //Takes days open string passed from SQL database and converts to boolean array of days open
     static dayArrFunc(dayString){
         const dayStrArr = dayString.split(" ");
         const dayArr = [false, false, false, false, false, false, false];
