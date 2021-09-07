@@ -1,4 +1,4 @@
-# hand_up
+# hand_up: an app to provide local resources and notifications
 
 #will need to have react-native set up on computer see: https://reactnative.dev/docs/
 
