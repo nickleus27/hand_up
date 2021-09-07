@@ -6,19 +6,24 @@
 
 1. run command, npm i, in terminal in project directory after downloading repository. This will install node_modules into project directory. After this you can run project.
 2. run commands:
-3. npm install react-native-sqlite-storage --save
-4. npm install @react-navigation/native --save
-5. npm install @react-navigation/stack --save
-6. npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view --save
-7. npm install --save react-native-push-notification
-8. npm install --save @react-native-community/push-notification-ios
+3. npm install @react-navigation/native --save
+4. npm install @react-navigation/stack --save
+5. npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view --save
+6. npm install --save react-native-push-notification
+7. npm install --save @react-native-community/push-notification-ios
 9. cd ios && pod install && cd ..
-10. npx react-native link
-11. npx pod-install
-12. now you can run app in ios or android...npx react-native run-ios, or npx react-native run-android
+10. To run while in directory use command:
+11.  npx react-native run-ios (for ios)
+12.  npx react-native run-android (for android)
 
-purpose: an app to help people find resources in a situation of being without job or house: examples: soup kitchens, shelters, work agencies, government resources, aa and na meetings
+Purpose: an app to help people find resources in a situation of being without job or house: examples: soup kitchens, shelters, work agencies, government resources, etc.
 
-for starter: app will give notifications and directions of upcoming requested resource events
+Current State of App: App will give notifications and directions of upcoming requested resource events.
 
-goals: 1.create layout: scrollview, navigation to multiple screens, text entry, and buttons 2.create a database: locally or on server? Possible sql database on phone 3.create web scraper: find a way to scrape information we need for resource database
+Goals and Knowledge learned: 
+1.  Create layout: scrollview, navigation to multiple screens, text entry, and buttons.
+2.  Create a database: Preloaded sql database.
+3.  Create local push notifications: ios and android.
+
+Related Projecsts:
+1.  Web Crawler in python to scrape information for SQL database from the internet
