@@ -36,8 +36,8 @@ export function navigate(name, params) {
   
 //This doesnt navigate to page upon opening notification everytime???
   if (navigationRef.isReady()) {
-    navigationRef.navigate(name, params);
-  }else{
+    navigationRef.dispatch(StackActions.push(name, params))
+    }else{
     //what to do if navigation is NOT ready...
     navigationRef.current.getRootState();
   }
