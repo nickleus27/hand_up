@@ -1,5 +1,17 @@
 # hand_up: an app to provide local resources and notifications
 
+Purpose: An app to help people find resources in a situation of being without job or house. Example resources: soup kitchens, shelters, work agencies, government resources, etc.  Will try to make this app work with as little internet required as possible since people who need this app may have limited internet / data access.  The goal will be to put resources into SQLite database so all the person will need is a smart phone and one time internet access to download app.
+
+Current State of App: App will give notifications and directions of upcoming requested resource events.
+
+Goals and Knowledge learned: 
+1.  Create layout: scrollview, navigation to multiple screens, text entry, and buttons.
+2.  Create a database: Preloaded sql database.
+3.  Create local push notifications: ios and android.
+
+Related Projecsts:
+1.  Web Crawler in python to scrape information for SQL database from the internet
+
 #will need to have react-native set up on computer see: https://reactnative.dev/docs/
 
 0. After cloning repository: in your terminal navigate into hand_up file directory and follow these steps.
@@ -15,15 +27,3 @@
 10. To run while in directory use command:
 11.  npx react-native run-ios (for ios)
 12.  npx react-native run-android (for android)
-
-Purpose: an app to help people find resources in a situation of being without job or house: examples: soup kitchens, shelters, work agencies, government resources, etc.
-
-Current State of App: App will give notifications and directions of upcoming requested resource events.
-
-Goals and Knowledge learned: 
-1.  Create layout: scrollview, navigation to multiple screens, text entry, and buttons.
-2.  Create a database: Preloaded sql database.
-3.  Create local push notifications: ios and android.
-
-Related Projecsts:
-1.  Web Crawler in python to scrape information for SQL database from the internet
