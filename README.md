@@ -9,7 +9,7 @@ Goals and Knowledge learned:
 2.  Create a database: Preloaded sql database.
 3.  Create local push notifications: ios and android.
 
-Related Projecsts:
+Related Projects:
 1.  Web Crawler in python to scrape information for SQL database from the internet
 
 #will need to have react-native set up on computer see: https://reactnative.dev/docs/
