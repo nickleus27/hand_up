@@ -152,10 +152,6 @@ console.log(counter);
       style={item.isSelect ? styles.selected : styles.list}      
       onPress={() => 
         selectItem(item)}
-
-        //start switching notification calls to hear.  need a counter variable to keep track of notication_id...could keep a corresponding array for this too?
-        //or a map for this...probably a map <----##
-      
        >
         <Text>Id: {item.row_id}</Text>
         <Text>Organization: {item.org_name}</Text>

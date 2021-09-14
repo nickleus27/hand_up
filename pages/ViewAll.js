@@ -10,7 +10,7 @@ import React, {useState, useEffect} from 'react';
 import {FlatList, Text, View, SafeAreaView, Linking, Platform, StyleSheet} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 
-// Connction to access the pre-populated user_db.db
+// Connction to access the pre-populated soup_kitchen_sc.db
 const db = openDatabase({name: 'soup_kitchen_sc.db', createFromLocation: 1});
 
 const ViewAll = () => {
@@ -28,17 +28,16 @@ const ViewAll = () => {
           //console.log(results.rows.item(i));
         }
         setFlatListItems(temp);
-        console.log(flatListItems);
+        //console.log(temp);
       });
     });
   }, []);
 
-  //https://www.devsamples.com/javascript/react-native/open-map-with-prefilled-address
-  //NEED TO CREATE FUNCTION THAT SEPERATES ADRESS, CITY, AND ZIPCODE FROM ADRESS STRING...
+//function to open address in maps
     const openMap = async (address) => {
     const destination = encodeURIComponent(`${address}`);  
     const provider = Platform.OS === 'ios' ? 'apple' : 'google'
-    const link = `http://maps.${provider}.com/?daddr=${destination}`;//SHOULD THIS OBJECT BE DESTINATION?
+    const link = `http://maps.${provider}.com/?daddr=${destination}`;
 
     try {
         const supported = await Linking.canOpenURL(link);

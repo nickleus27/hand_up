@@ -2,6 +2,7 @@
  * Nick Anderson
  * Augest 19, 2021
  * This page shows individual resource from onNotification click
+ * This page doesn't load consistently onNotification click
  */
  "use strict";
 
@@ -37,12 +38,11 @@ const SingleResourceView = ({route, navigation}) => {
         });
     }, []);
 
-      //https://www.devsamples.com/javascript/react-native/open-map-with-prefilled-address
-  //NEED TO CREATE FUNCTION THAT SEPERATES ADRESS, CITY, AND ZIPCODE FROM ADRESS STRING...
+//function to open address in maps
     const openMap = async (address) => {
         const destination = encodeURIComponent(`${address}`);  
         const provider = Platform.OS === 'ios' ? 'apple' : 'google'
-        const link = `http://maps.${provider}.com/?daddr=${destination}`;//SHOULD THIS OBJECT BE DESTINATION?
+        const link = `http://maps.${provider}.com/?daddr=${destination}`;
 
         try {
             const supported = await Linking.canOpenURL(link);

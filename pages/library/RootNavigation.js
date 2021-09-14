@@ -10,23 +10,39 @@ export function navigate(name, params) {
   //this is my first attempt to use async functions
   //testing to see if this will work...
 
-  //need to add error catching...?catch block? reject block...???
+  //I DO NOT BELIEVE THIS IS WORKING THE WAY I THINK IT IS....
+  /*
   async function navIsReady(){
-    while(!navigationRef.isReady){
+    while(!navigationRef.isReady && !navigationRef.isFocused){
       //do nothing
+      console.log("waiting for screen render");
     }
     return navigationRef.isReady();
   }
-  navIsReady().then(navigationRef.dispatch(StackActions.push(name, params)));
+    navIsReady().then(navigationRef.dispatch(StackActions.push(name, params)));
 
-  /*
-//HOW TO ASYNCHRONOUSLY AWAIT FOR isReady to be true??
+  */
+ /*
+  async function waitForNav() {
+    let myPromise = new Promise(function(myResolve, myReject) {
+      setTimeout(function() { myResolve( navigationRef.dispatch(StackActions.push(name, params))
+        ); }, 3000);
+    });
+    const executeNav = await myPromise;
+    executeNav;
+  }
+  waitForNav();
+  */
+  
+//This doesnt navigate to page upon opening notification everytime???
   if (navigationRef.isReady()) {
-    navigationRef.navigate(name, params);
-  }else{
+    //using push pushes page on stack regardless if already in stack. 
+    //That way you can open multiple notificaitons and render accordingly
+    navigationRef.dispatch(StackActions.push(name, params));
+    }else{
     //what to do if navigation is NOT ready...
     navigationRef.current.getRootState();
   }
-  */
+  
 
 }
