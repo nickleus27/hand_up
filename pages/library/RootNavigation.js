@@ -36,7 +36,9 @@ export function navigate(name, params) {
   
 //This doesnt navigate to page upon opening notification everytime???
   if (navigationRef.isReady()) {
-    navigationRef.dispatch(StackActions.push(name, params))
+    //using push pushes page on stack regardless if already in stack. 
+    //That way you can open multiple notificaitons and render accordingly
+    navigationRef.dispatch(StackActions.push(name, params));
     }else{
     //what to do if navigation is NOT ready...
     navigationRef.current.getRootState();
