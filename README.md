@@ -6,6 +6,8 @@ Current State of App: App will give notifications and directions of upcoming req
 
 Current unresolved problems:  App will not open SingleResourceView when onNotification is clicked everytime from a background state.  Also, it seems when this happens the PushNotification.localNotificationSchedule doesn't get called in onNotification either.  Have not found a solution.  Works sometimes, and sometimes it does not.  I have .configure() outside of a component as suggested in documentation.
 
+Also app needs testing on an IOS device, I only have a simulator.
+
 Goals and Knowledge learned: 
 1.  Create layout: scrollview, navigation to multiple screens, text entry, and buttons.
 2.  Create a database: Preloaded sql database.
