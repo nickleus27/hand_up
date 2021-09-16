@@ -19,7 +19,6 @@ PushNotification.configure({
   onNotification: function (notification) {
     console.log("NOTIFICATION and configure are working:", notification);
 
-    /* trying to see if moving this after rescheduling notification makes a difference in errors im having
     let notificationID;
     if(Platform.OS === 'android'){//android
       notificationID = JSON.stringify(parseInt(notification.id));
@@ -28,7 +27,7 @@ PushNotification.configure({
     }
     
     handleNotification(notificationID);
-    */
+    
 
     if(Platform.OS === 'android' && notification.repeatType === ""){//android notification
       PushNotification.localNotificationSchedule({
@@ -53,16 +52,6 @@ PushNotification.configure({
           repeats: notification.data.repeats,
         });
     }
-
-    /*starting here to handleNotification(notificationID); is currently above and commented out */
-    let notificationID;
-    if(Platform.OS === 'android'){//android
-      notificationID = JSON.stringify(parseInt(notification.id));
-    }else{//ios
-      notificationID = JSON.stringify(parseInt(notification.data.id));
-    }
-    
-    handleNotification(notificationID);
 
     // (required) Called when a remote is received or opened, or local notification is opened
     notification.finish(PushNotificationIOS.FetchResult.NoData);
