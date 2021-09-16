@@ -4,6 +4,8 @@ Purpose: An app to help people find resources in a situation of being without jo
 
 Current State of App: App will give notifications and directions of upcoming requested resource events.
 
+Current unresolved problems:  App will not open SingleResourceView when onNotification is clicked everytime from a background state.  Also, it seems when this happens the PushNotification.localNotificationSchedule doesn't get called in onNotification either.  Have not found a solution.  Works sometimes, and sometimes it does not.  I have .configure() outside of a component as suggested in documentation.
+
 Goals and Knowledge learned: 
 1.  Create layout: scrollview, navigation to multiple screens, text entry, and buttons.
 2.  Create a database: Preloaded sql database.
