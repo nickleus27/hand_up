@@ -8,6 +8,8 @@ Current unresolved problems:  App will not open SingleResourceView when onNotifi
 
 Also app needs testing on an IOS device, I only have a simulator.
 
+Important Android: On android user will haave to disable battery optimization fro this app for the notifications to fire correctly when the app is in a background state.
+
 Goals and Knowledge learned: 
 1.  Create layout: scrollview, navigation to multiple screens, text entry, and buttons.
 2.  Create a database: Preloaded sql database.
