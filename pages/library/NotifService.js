@@ -52,7 +52,7 @@ export default class NotifService {
                 ]);
             });
         }else{//android cancel notification
-            PushNotification.cancelLocalNotification({id: notifID});
+            PushNotification.cancelLocalNotification(notifID);
             PushNotification.getScheduledLocalNotifications((notifs)=>{
                 console.log(notifs);
             });
