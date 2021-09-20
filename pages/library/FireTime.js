@@ -95,11 +95,11 @@ class FireTime{
 
                 const start = dayMap.get(dayStrArr[0]);
                 const end = dayMap.get(dayStrArr[2]);
-                let loopsEnd = end+1;
-                if(loopsEnd >= dayArr.length){
-                    loopsEnd = 0;
+                console.log(start, end);
+                if(end >= dayArr.length){
+                    end = 0;
                 }
-                for(let i = start; i != loopsEnd; i++){
+                for(let i = start; i <= end; i++){
                     if(i>=dayArr.length){
                         i = 0;
                         dayArr[i] = true;

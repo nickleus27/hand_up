@@ -65,7 +65,7 @@ if(Platform.OS === 'ios'){//ios notification
       /* Android Only Properties */
 
       /*ADDED ACTIONS HERE SINCE LAST COMMIT<-----------------------##*/
-      actions: ["Yes", "No"],
+      actions: ["Open",],
       repeatType: (FireTime.isEveryday(resource.week_day)) ? "day" : "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
   }

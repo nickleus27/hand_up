@@ -34,6 +34,7 @@ export default class NotifService {
               allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
             
               /* Android Only Properties */
+              actions: ["Open",],
               repeatType: (FireTime.isEveryday(resource.week_day)) ? "day" : "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
             });
         }
@@ -51,7 +52,7 @@ export default class NotifService {
                 ]);
             });
         }else{//android cancel notification
-            PushNotification.cancelLocalNotifications({id: notifID});
+            PushNotification.cancelLocalNotification({id: notifID});
             PushNotification.getScheduledLocalNotifications((notifs)=>{
                 console.log(notifs);
             });
