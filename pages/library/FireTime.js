@@ -110,6 +110,7 @@ class FireTime{
                 }
             }
         }
+        console.log(dayArr);
         return dayArr;
     }
 

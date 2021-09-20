@@ -63,6 +63,9 @@ if(Platform.OS === 'ios'){//ios notification
       //userInteraction: false, //HOW TO MAKE NOTIF FIRE WITHOUT CLICKING NOTIF
     
       /* Android Only Properties */
+
+      /*ADDED ACTIONS HERE SINCE LAST COMMIT<-----------------------##*/
+      actions: ["Yes", "No"],
       repeatType: (FireTime.isEveryday(resource.week_day)) ? "day" : "", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info.
     });
   }
