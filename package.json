@@ -27,6 +27,7 @@
     "react-native-screens": "^3.4.0",
     "react-native-sqlite-storage": "^5.0.0",
     "set-value": "^4.1.0",
+    "templ": "^1.4.3",
     "ws": "^8.2.2"
   },
   "devDependencies": {
