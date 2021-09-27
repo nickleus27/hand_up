@@ -139,6 +139,8 @@ class FireTime{
             if(startDay < 0){//if day is behind current day in the week add a week to the negative number
                 startDay += 7;
             }
+
+            
             if(startDay === 0){//if same day
                 if(hourHasPassed){//hours have passed today
                     console.log("has already passed for today");
@@ -149,12 +151,19 @@ class FireTime{
                     continue;
                 }
             }
+            
+
             if(startDay === 1){//use values passed into function for startTime they are already correct. Dont need to add a day if only a day ahead.
                 startDay = 0;
             }
+
+            //notification is fireing a day ahead of schedule when the gap is over a day
+            //see if this fixes that
+            /*
             if(startDay >= 2){//if startTime is more than a day away subtract a day from total days since startHour and startMins passed into this function already calculated a day into future
                 startDay -= 1
             }
+            */
 
             const startTime = (startHour*3600000)+(startMins*60000)+ (startDay*86400000) - timeAhead;
             console.log("this is starthour ", startHour);
