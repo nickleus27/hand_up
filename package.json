@@ -16,6 +16,7 @@
     "@react-native-community/push-notification-ios": "^1.8.0",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/stack": "^5.14.5",
+    "ansi-regex": "^6.0.1",
     "install": "^0.13.0",
     "npm": "^7.19.1",
     "react": "17.0.1",
